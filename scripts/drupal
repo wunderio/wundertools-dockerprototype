@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+#
+# INSTRUCTIONS:
+#   Run this is though you were running drush, but in the root project of the folder
+#
+
+# Project name as used to create containers
+PROJECT="${PROJECT:wundertool2}"
+
+# Use a root path
+PWD="${PWD:$(pwd)}"
+
+# App project root
+APP="${APP:${PWD}/app"
+APP_PROJECT="${APP_PROJECT:${APP}/project}"
+
+if [ ! -f "${APP_PROJECT}/vendor/bin/drush" ]; then
+  echo "WARNING: there is no drush in this project, which probably mean that you have not run composer in your project."
+  exit 1
+fi
+
+docker run --rm -t -i \
+    --net "source_default" \
+    -v ${APP_PROJECT}:/app/project \
+    -v ${APP}/drush:/app/.drush \
+    -v ${HOME}/./ssh:/app/.ssh \
+    -v ${HOME}/./gitconfig:/app/.gitconfig \
+    --hostname=${PROJECT} \
+    --link=${PROJECT}_db:database.app \
+    -w=/app/project/web \
+    --entrypoint=/app/project/vendor/bin/drupal \
+    jamesnesbitt/wunder-developershell \
+    ${@}
