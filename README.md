@@ -2,6 +2,16 @@
 
 ## Getting set up
 
+- Install Docker locally:
+  - OS X / Windows
+    - If you have an invite for Docker for Mac / Docker for Windows, use that.
+    - In the meantime, get Docker Toolbox from here https://www.docker.com/products/docker-toolbox
+  - Linux
+    - See https://docs.docker.com/engine/installation
+- Clone this repository.
+- (if using Docker Toolbox) Open the docker Quickstart Terminal.
+- Run `docker-compose up` in the project root.
+
 ### DNS
 
 #### Current quick and dirty solution:
