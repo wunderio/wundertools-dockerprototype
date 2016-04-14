@@ -17,4 +17,4 @@ services:
   fpm:
     image: php:fpm
     links:
-      - db:.db.app
+      - db:db.app
