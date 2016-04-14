@@ -1,3 +1,20 @@
 version: "2"
 services:
-  
+  db: 
+    image: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=MYSQL 
+      - MYSQL_DATABASE=app
+      - MYSQL_USER=app
+      - MYSQL_PASSWORD=app
+  www:
+    image: nginx
+    environment:
+      - NGINX_HOST=fpm.app
+      - NGINX_PORT=80
+    links:
+      - fpm
+  fpm:
+    image: php:fpm
+    links:
+      - db
