@@ -1,33 +1,42 @@
 #!/usr/bin/env bash
 #
 # INSTRUCTIONS:
-#   Run this is though you were running drush, but in the root project of the folder
+#   Run this is though you were running drush, but in the web project of the folder
 #
 
 # Project name as used to create containers
 PROJECT="${PROJECT:wundertool2}"
 
-# Use a root path
-PWD="${PWD:$(pwd)}"
+# App project root used to mount project files into containers
+if [ -z "${APP}" ]; then
+	if [ -z "${PWD}" ]; then
+		PWD="$(pwd)"
+	fi
+	APP="${PWD}/app"
+fi
 
-# App project root
-APP="${APP:${PWD}/app"
-APP_PROJECT="${APP_PROJECT:${APP}/project}"
-
-if [ ! -f "${APP_PROJECT}/vendor/bin/drush" ]; then
+if [ ! -f "${APP}/project/vendor/bin/drush" ]; then
   echo "WARNING: there is no drush in this project, which probably mean that you have not run composer in your project."
   exit 1
 fi
 
+#
+# This image likes to have the project at /app/project as the /app
+# is the "app" user's $HOME path, which is where various user folders
+# and files will b created.  Mount the project beneath that prevents
+# creation of mount point files for .ssh and .gitconfig in the source
+# code.
+#
+
 docker run --rm -t -i \
     --net "source_default" \
-    -v ${APP_PROJECT}:/app/project \
-    -v ${APP}/drush:/app/.drush \
-    -v ${HOME}/./ssh:/app/.ssh \
-    -v ${HOME}/./gitconfig:/app/.gitconfig \
     --hostname=${PROJECT} \
-    --link=${PROJECT}_db:database.app \
-    -w=/app/project/web \
-    --entrypoint=/app/project/vendor/bin/drush \
+    --link=${PROJECT}_db:db.app" \
+    --volume="${APP}:/app/project" \
+    --volume="${HOME}/.drush:/app/.drush" \
+    --volume="${HOME}/.ssh:/app/.ssh" \
+    -w=/app/project \    
+    --name="${PROJECT}_drush" \
+    --entrypoint=/app/project/vendor/bin/drupal \
     jamesnesbitt/wunder-developershell \
     ${@}
