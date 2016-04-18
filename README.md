@@ -22,6 +22,26 @@
   \tools ---------------> Little support applets that you may need
 ````
 
+## Getting set up
+
+The project comes completely un-built.  Building may require docker steps as 
+well as other steps related to Drupal architecture.
+
+To start all of the pieces for docker use the compose command, which behaves 
+similar to vagrant:
+
+    $/> wundertools/compose up -d 
+
+Typically you will need to run composer:
+
+    $/> wundertools/composer update
+    $/> wundertools/composer upgrade
+
+Then you should be up and running.  See "access my site"
+
+For more commands See "Using the tools"
+
+
 ## Using the tools
 
 *** RIGHT NOW WE HAVE A SET OF BASH SCRIPTS TO PROTOTYPE BEHAVIOUR.  THESE WILL BE REPLACED
@@ -124,23 +144,6 @@ $/> wundertools/shell
 # run a direct command
 $/> wundertools/shell ls -la
 ````
-
-## Getting set up
-
-The project comes completely un-built.  Building may require docker steps as 
-well as other steps related to Drupal architecture.
-
-To start all of the pieces for docker use the compose command, which behaves 
-similar to vagrant:
-
-    $/> wundertools/compose up -d 
-
-Typically you will need to run composer:
-
-    $/> wundertools/composer update
-    $/> wundertools/composer upgrade
-
-Then you should be up and running.  See "access my site"
 
 ### Accessing my containers
 
