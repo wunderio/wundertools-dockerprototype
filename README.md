@@ -4,7 +4,7 @@
 
 *** note that our app folder is modeled on the drupal8 for composer
 
-
+````
 \app -------------------> everything to do with your application
   \drush ---------------> .drush folder for container user, which can hold aliases and cache
   \console -------------> .console fodler for container user, which can hold everything from $/> drupal init
@@ -19,7 +19,7 @@
   \COMMAND -------------> Various bash commands that replace typically used tools like drush, docker-compose and composer
 
   \tools ---------------> Little support applets that you may need
-
+````
 
 ## Using the tools
 
