@@ -6,12 +6,10 @@ docker run --rm -t -i \
     --net "${COMPOSE_NETWORK}" \
     --hostname=${PROJECT} \
     --volume="${PATH_APP}:/app/project" \
-    --volume="${PATH_HOME}/.drush:/app/.drush" \
-    --volume="${PATH_HOME}/.console:/app/.console" \
     --volume="${PATH_HOME}/.gitconfig:/app/.gitconfig" \
     --volume="${PATH_HOME}/.ssh:/app/.ssh" \
     --entrypoint=/usr/bin/composer \
     -w=/app/project \
-    --name="composer" \
+    --name="${PROJECT}_composer" \
     jamesnesbitt/wunder-developershell \
     --working-dir=/app/project ${@}
