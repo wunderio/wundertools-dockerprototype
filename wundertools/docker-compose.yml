@@ -10,7 +10,6 @@ www:
   environment:
     - NGINX_HOST=fpm.app
     - NGINX_PORT=80
-
     # If you are using DNSDOCK, this will assign a local DNS entry
     - DNSDOCK_ALIAS=wunderdemo.local.wunder.io
   links:

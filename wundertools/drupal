@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+#
+# RUN DRUPAL CONSOLE
+#
+# this script creates and runs a temporary container using the drupal console command that is created
+# during the composer install.  The contents of the app folder are mounted into a custom container that has
+# php-cli installed, and linked to the db container.  This container then passes any arguments directly to
+# the console command.
+#
+# This script first checks to see if you have run composer update
+#
+
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/config.inc"
+
+if [ ! -f "${PATH_APP}/vendor/bin/drupal" ]; then
+  echo "WARNING: there is no drupal console in this project, which probably mean that you have not run composer in your project."
+  exit 1
+fi
+
+docker run --rm -t -i \
+    --net "${COMPOSE_NETWORK}" \
+    --hostname=${PROJECT} \
+    --link="${PROJECT}_db:db.app" \
+    --volume="${PATH_APP}:/app/project" \
+    --volume="${PATH_APP}/console:/app/.console" \
+    --volume="${PATH_APP}/drush:/app/.drush" \
+    --volume="${PATH_HOME}/.ssh:/app/.ssh" \
+    -w=/app/project \
+    --name="${PROJECT}_drupal" \
+    --entrypoint=/app/project/vendor/bin/drupal \
+    --user=app \
+    ${DOCKER_IMAGE_DEVELOPERTOOL} \
+    ${@}

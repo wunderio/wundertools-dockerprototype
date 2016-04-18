@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/config.inc"
+
+if [ ! -f "${PATH_APP}/vendor/bin/drush" ]; then
+  echo "WARNING: there is no drush in this project, which probably mean that you have not run composer in your project."
+  exit 1
+fi
+
+docker run --rm -t -i \
+    --net "${COMPOSE_NETWORK}" \
+    --hostname=${PROJECT} \
+    --link="${PROJECT}_db:db.app" \
+    --volume="${PATH_APP}:/app/project" \
+    --volume="${PATH_APP}/drush:/app/.drush" \
+    --volume="${PATH_HOME}/.ssh:/app/.ssh" \
+    -w=/app/project \
+    --name="${PROJECT}_drush" \
+    --entrypoint=/app/project/vendor/bin/drush \
+    --user=app \
+    ${DOCKER_IMAGE_DEVELOPERTOOL} \
+    ${@}
