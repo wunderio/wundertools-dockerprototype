@@ -66,6 +66,8 @@ root.  Pass compose command and flags directly to the command
 You can use this command as a replacement for running drush  from the host, and
 pass drush flags directly to the script
 
+*** this wrapper uses the drush that comes from the composer update (must run composer first)
+
 #### example
 
 ````
@@ -75,13 +77,16 @@ $/> wundertools/drush sql-cli
 
 ### drupal : wraps drupal console into a command container
 
+This script wraps around the drupal-console.
+
+*** this wrapper uses the console that comes from the composer update (must run composer first)
 
 #### example
 
 ````
-$/> wundertools/drush config:import
-$/> wundertools/drush cache:rebuild all
-$/> wundertools/drush generate:module
+$/> wundertools/drupal config:import
+$/> wundertools/drupal cache:rebuild all
+$/> wundertools/drupal generate:module
 ````
 
 ### shell : gives a usefull ZSH shell with access to toolS and other containers
