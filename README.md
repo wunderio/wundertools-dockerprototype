@@ -10,6 +10,7 @@
   \console -------------> .console fodler for container user, which can hold everything from $/> drupal init
 
   \vendor --------------> folder that has elements managed by drupal composer
+  \web -----------------> web server root
 
 \wundertools -----------> everything to do with wundertools and docker
   \docker --------------> folders per image build for custom project images (each contains a Dockerfile)
