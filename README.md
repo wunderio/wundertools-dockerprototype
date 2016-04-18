@@ -30,6 +30,19 @@ scripts are to be run directly.  The scripts assume that the layout is respected
 
 Each of the commands should be run directly, from the project root and should pull in the configuration from config.inc
 
+The followind command tools exist:
+
+* compose : docker-compose wrapper
+* composer : php composer wrapper
+* drush : drush wrapper (requires compose is run first)
+* drupal : drupal-console wrapper (requires compose is run first)
+* shell : a zsh shell prompt, similar to what ssh might give you
+
+The following are on our @TODO list:
+
+* archive/restore : methods that could be used to backup, which would reuse things like drush
+* feature/branch : create running branched environments
+
 ### compose : docker-compose replacement
 
 Here we wrap docker compose so that we can hard code the project name, and perhaps the project network
@@ -58,8 +71,10 @@ root.  Pass compose command and flags directly to the command
 
 #### example
 
-    $/> wundertools/composer update
-    $/> wundertools/composer install
+````
+$/> wundertools/composer update
+$/> wundertools/composer install
+````
 
 ### drush : wraps drush into a command container
 
@@ -94,6 +109,12 @@ $/> wundertools/drupal generate:module
 This is a command container, that provides a full shell, similar to what you
 would want from an ssh shell.
 
+Shell as a command is quite usefull for people who are used to getting ssh access
+to a virtual machine, but also because it is quite easy for different developers
+and developer teams to customize the image used for their own tastes and needs.
+This customization could be done without affecting the project as it fits into
+production workflow.
+
 #### example
 
 ````
@@ -101,6 +122,7 @@ would want from an ssh shell.
 $/> wundertools/shell
 # run a direct command
 $/> wundertools/shell ls -la
+````
 
 ## Getting set up
 
@@ -112,13 +134,16 @@ similar to vagrant:
 
     $/> wundertools/compose up -d 
 
-
 Typically you will need to run composer:
 
     $/> wundertools/composer update
     $/> wundertools/composer upgrade
 
-Then you should be up and running.
+Then you should be up and running.  See "access my site"
+
+### Accessing my containers
+
+@TODO
 
 ### DNS
 
