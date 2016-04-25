@@ -2,10 +2,25 @@
 
 source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../config.inc"
 
+NODE="${1}"
+if [ -z "${NODE}" ]; then
+	echo "[- no was node specified, did you want to check for 'containerIP www'? -]"
+	exit 1
+fi
+
+
 if [ -z "${COMPOSE_NETWORK}" ]; then
 	FORMAT="{{ .NetworkSettings.IPAddress }}"
 else
-	FORMAT="{{ .NetworkSettings.Networks.${COMPOSE_NETWORK}.IPAddress }}"
+
+	case "${COMPOSE_NETWORK}" in
+		"bridge")
+			FORMAT="{{ .NetworkSettings.IPAddress }}"
+			;;
+		*)
+			FORMAT="{{ .NetworkSettings.Networks.${COMPOSE_NETWORK}.IPAddress }}"
+			;;
+	esac
 fi
 
-docker inspect --format "${FORMAT}" "${PROJECT}_${1}_1"
+docker inspect --format "${FORMAT}" "${PROJECT}_${NODE}_1"
