@@ -2,4 +2,10 @@
 
 source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../config.inc"
 
-docker inspect --format '{{ .NetworkSettings.IPAddress }}' ${PROJECT}_${1}_1 
+if [ -z "${COMPOSE_NETWORK}" ]; then
+	FORMAT="{{ .NetworkSettings.IPAddress }}"
+else
+	FORMAT="{{ .NetworkSettings.Networks.${COMPOSE_NETWORK}.IPAddress }}"
+fi
+
+docker inspect --format "${FORMAT}" "${PROJECT}_${1}_1"

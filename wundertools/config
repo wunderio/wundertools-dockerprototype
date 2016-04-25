@@ -12,10 +12,12 @@ echo " (In the future I will ask you questions to configure your site)"
 # Output current configuration
 echo "CURRENT CONFIGURATION:"
 echo "-- GENERAL"
-echo "--> PROJECT NAME : ${PROJECT}"
+echo "--> PROJECT NAME ------: ${PROJECT}"
 echo "-- PATHS"
-echo "--> APP          : ${PATH_APP}"
-echo "--> WUNDERTOOLS  : ${PATH_WUNDERTOOLS}"
+echo "--> APP----------------: ${PATH_APP}"
+echo "--> WUNDERTOOLS -------: ${PATH_WUNDERTOOLS}"
+echo "-- DOCKER-COMPOSE"
+echo "--> COMPOSE_NETWORK----: ${COMPOSE_NETWORK}"
 
 echo "-- TESTS"
 

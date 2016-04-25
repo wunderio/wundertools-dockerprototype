@@ -1,0 +1,149 @@
+# WunderTools docker-compose
+#
+# This file is a standard docker-compose version 2 format file.
+#
+# Docker compose is used as a standard base in the wundertools idea
+# because it is an industry standard format, used even by groups
+# that don't use the docker supported python app.
+# It is considered a safe approach for defining nodes from development
+# to production.
+#
+# Note that version "2" offers some features that earlier version
+# don't, but it seems that some tools don't yet support it (such as
+# possible rancherOS)
+#
+#
+# Because the goal of this file is to have something which can be
+# used anywhere, even outside of this repo, the file should not 
+# rely on any builds or bind volumes, as such elements would not
+# work on a host, without access to the full wundertools set.
+#
+# - Any volume binds should be limited to overlaying local configuration
+#   or source code on top of something that already exists in the image,
+#   in order to get local access in development.
+# - Any image builds should push directly to hosted images, which can 
+#   be used in production.
+#
+###
+#
+# ILARI IMAGES
+#
+# This compose uses a number of Alpine images that Ilari is working
+# on.  These will likely be the commonly used images for WunderTools
+# but they are not yet ready for use, as they miss some drupal specific
+# configuration.
+#
+# nginx:: image: ilari/alpine-nginx-pagespeed
+# php::   image: ilari/alpine-php
+# db::    image: ilari/alpine-mariadb
+#
+###
+#
+# JAMES IMAGES
+#
+# These images are a set of centos7 based images that are much less 
+# efficient, and less safe than Ilari's images, but they are ready
+# to work with Drupal out of the box.
+#
+# nginx:: image: jamesnesbitt/wunder-nginx   -- proper php handling
+# php::   image: jamesnesbitt/wunder-nginx   -- better php configuraitons
+# db::    image: jamesnesbitt/wunder-mariadb -- there is no advantage to this
+#
+###
+version: "2"
+services:
+
+  ####
+  # SOURCE
+  #
+  # Create a container for source code [this should be an image with source code]
+  #
+  # This container has a "CMD" but it never needs to run as it is used only as
+  # a source of "volume" from which other containers get their source code.
+  #
+  # In development, we overlay the host code to get local file access, but in 
+  # production we want an image that has source code built in. We can use 
+  # wundertools to build source images easily, but there is no need for us to 
+  # develop that functionality yet.
+  # 
+  source:
+    image: alpine  # in this case, image is irrelvant essentially, as the container never runs
+    command:
+      - /bin/true # this is an industry standard hack used with docker-compose
+    volumes:
+      # Here we overlay local source on top of where the built source code 
+      # would be in a production ready source image.
+      - ../app:/app/project 
+
+  ####
+  # DB node 
+  #
+  # Presents a standalone DB server with an open port
+  #
+  db: 
+    #image: ilari/alpine-mariadb      # this image comes with no database/user/password
+
+    ####
+    # IMAGE BUILD OVERRIDES
+    #
+    build: # docker build instructionss
+      context: ./docker/alpine-mariadb
+      args: # arguments used only during build
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_USER: app
+        MYSQL_PASSWORD: app
+        MYSQL_DATABASE: app 
+
+  ####
+  # FPM node
+  #
+  # presents a standalone PHP-FPM service which accepts tcp connections.  It links
+  # to the DB using the URL db.app and pulls source code form the source node volumes
+  #
+  #fpm:
+  #  #image: ilari/alpine-nginx-pagespeed # this image doesn't look for source code at /app
+  #  volumes_from:
+  #    - source  # FPM gets source code from the source container
+  #  links:
+  #    - db:db.app # fpm sees the db container at URL "db.app"
+
+  ####
+  # IMAGE BUILD OVERRIDES
+  # 
+  #  build: # docker build instructionss
+  #    context: ./docker/alpine-php
+
+  fpm:
+    image: jamesnesbitt/wunder-php7fpm
+    volumes_from:
+      - source  # FPM gets source code from the source container
+    links:
+      - db:db.app # fpm sees the db container at URL "db.app"
+
+  ####
+  # WWW node
+  #
+  # Either an nginx or apache server that receives https requests, and if needed 
+  # hands off to fpm using the url fpm.app.  This service gets only read access to 
+  # volumes from the source container.
+  #
+  # There is an ENV variable here, that would configure DNSDOCK to use a specific URL
+  # if you have DNSDOCK set up.  If you aren't using DNSDOCK then it does nothing.
+  #
+  www:
+    # currently using a built image here until the core image meets our needs
+    #image: ilari/alpine-nginx-pagespeed
+
+    environment:
+      # If you are using DNSDOCK, this will assign a local DNS entry
+      - DNSDOCK_ALIAS=wunderdemo.docker
+    volumes_from:
+      - source:ro # www gets source code from the source container AS READ ONLY
+    links:
+      - fpm:fpm.app # www sees the fpm container at URL "fpm.app"
+
+    ####
+    # IMAGE BUILD OVERRIDES
+    # 
+    build: # docker build instructionss
+      context: ./docker/alpine-nginx-pagespeed

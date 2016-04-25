@@ -1,0 +1,14 @@
+
+####################################
+# IGNORING WUNDERTOOLS RELATED STUFF
+#
+
+#######################
+# IGNORING DRUPAL STUFF
+app/composer.lock
+app/vendor
+app/web/core
+app/web/modules/contrib
+app/web/themes/contrib
+app/web/profiles/contrib
+
