@@ -4,7 +4,7 @@ source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../config.inc"
 
 NODE="${1}"
 if [ -z "${NODE}" ]; then
-	echo "[- no was node specified, did you want to check for 'containerIP www'? -]"
+	echo "[- There was no node specified, did you want to check for 'containerIP www'? -]"
 	exit 1
 fi
 
