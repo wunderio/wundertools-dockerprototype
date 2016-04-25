@@ -100,25 +100,18 @@ services:
   # presents a standalone PHP-FPM service which accepts tcp connections.  It links
   # to the DB using the URL db.app and pulls source code form the source node volumes
   #
-  #fpm:
-  #  #image: ilari/alpine-nginx-pagespeed # this image doesn't look for source code at /app
-  #  volumes_from:
-  #    - source  # FPM gets source code from the source container
-  #  links:
-  #    - db:db.app # fpm sees the db container at URL "db.app"
-
-  ####
-  # IMAGE BUILD OVERRIDES
-  # 
-  #  build: # docker build instructionss
-  #    context: ./docker/alpine-php
-
   fpm:
-    image: jamesnesbitt/wunder-php7fpm
+    #image: ilari/alpine-nginx-pagespeed # this image doesn't look for source code at /app
     volumes_from:
       - source  # FPM gets source code from the source container
     links:
       - db:db.app # fpm sees the db container at URL "db.app"
+
+  ####
+  # IMAGE BUILD OVERRIDES
+  # 
+    build: # docker build instructionss
+      context: ./docker/alpine-php
 
   ####
   # WWW node
