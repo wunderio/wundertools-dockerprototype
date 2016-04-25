@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/config.inc"
+
+docker run --rm -t -i \
+    --net "${COMPOSE_NETWORK}" \
+    --hostname=${PROJECT} \
+    --link="${PROJECT}_db:db.app" \
+    --link="${PROJECT}_fpm:fpm.app" \
+    --link="${PROJECT}_www:www.app" \
+    --volume="${PATH_APP}:/app/project" \
+    --volume="${PATH_APP}/console:/app/.console" \
+    --volume="${PATH_APP}/drush:/app/.drush" \
+    --volume="${PATH_HOME}/.ssh:/app/.ssh" \
+    -w=/app/project \
+    --name="${PROJECT}_shell" \
+    --user=app \
+    ${DOCKER_IMAGE_DEVELOPERTOOL} \
+    ${@}

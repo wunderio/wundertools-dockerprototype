@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/config.inc"
+
+echo " (In the future I will ask you questions to configure your site)"
+
+# @TODO
+# 1. loaded config.inc for default questions
+# 2. ask questions and save answers to vars
+# 3. write vars to config.inc file
+
+# Output current configuration
+echo "CURRENT CONFIGURATION:"
+echo "-- GENERAL"
+echo "--> PROJECT NAME ------: ${PROJECT}"
+echo "-- PATHS"
+echo "--> APP----------------: ${PATH_APP}"
+echo "--> WUNDERTOOLS -------: ${PATH_WUNDERTOOLS}"
+echo "-- DOCKER-COMPOSE"
+echo "--> COMPOSE_NETWORK----: ${COMPOSE_NETWORK}"
+
+echo "-- TESTS"
+
+if [ ! -f "${PATH_APP}/vendor/bin/drupal" ]; then
+  echo "--> drupal-console : NOT FOUND [${PATH_APP}/vendor/bin/drupal]"
+fi
+if [ ! -f "${PATH_APP}/vendor/bin/drush" ]; then
+  echo "--> drush          : NOT FOUND [${PATH_APP}/vendor/bin/drush]"
+fi
+
+echo "DONE"
