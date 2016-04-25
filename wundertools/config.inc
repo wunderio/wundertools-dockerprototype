@@ -85,7 +85,7 @@ fi
 
 # Project name
 if [ -z "${PROJECT}" ]; then
-    PROJECT="$(basename ${PATH_APP})"
+    PROJECT="$(basename $(cd ${PATH_APP} && cd ../ && pwd))"
 fi
 
 # dev image
