@@ -13,7 +13,7 @@ build: conf.database conf.user conf.root.pass conf.user.pass
 rmi:
 	-docker rmi $(IMAGE)
 
-clean:
+clean: rmi
 	docker ps -a --filter status="exited" --format '{{.ID}}' | xargs -r docker rm
 	docker images --filter "dangling=true" -q | xargs -r docker rmi
 	rm -f conf.*
