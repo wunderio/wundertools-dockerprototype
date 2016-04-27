@@ -24,6 +24,10 @@ GRANT ALL ON ${MYSQL_DATABASE}.* to ${MYSQL_USER}@'%' IDENTIFIED BY '${MYSQL_PAS
 FLUSH PRIVILEGES;
 SQL
 
-# end the show gracefully
+echo "Graceful exit of mysqld"
 killall -TERM mysqld
-sleep 5
+while true
+do
+  pgrep mysqld >/dev/null 2>&1 || break
+  sleep 1
+done

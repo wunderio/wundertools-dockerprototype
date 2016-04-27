@@ -14,6 +14,7 @@ rmi:
 	-docker rmi $(IMAGE)
 
 clean:
+	docker ps -a --filter status="exited" --format '{{.ID}}' | xargs -r docker rm
 	docker images --filter "dangling=true" -q | xargs -r docker rmi
 	rm -f conf.*
 
