@@ -11,7 +11,7 @@ build: conf.database conf.user conf.root.pass conf.user.pass
 		.
 
 rmi:
-	-docker rmi $(IMAGE)
+	-docker rmi "$(IMAGE)"
 
 clean: rmi
 	docker ps -a --filter status="exited" --format '{{.ID}}' | xargs -r docker rm
