@@ -87,7 +87,7 @@ services:
     # IMAGE BUILD OVERRIDES
     #
     build: # docker build instructionss
-      context: ./docker/alpine-mariadb
+      context: ./images/ilari/alpine-mariadb
       args: # arguments used only during build
         MYSQL_ROOT_PASSWORD: root
         MYSQL_USER: app
@@ -111,7 +111,7 @@ services:
   # IMAGE BUILD OVERRIDES
   # 
     build: # docker build instructionss
-      context: ./docker/alpine-php
+      context: ./images/ilari/alpine-php
 
   ####
   # WWW node
@@ -139,4 +139,4 @@ services:
     # IMAGE BUILD OVERRIDES
     # 
     build: # docker build instructionss
-      context: ./docker/alpine-nginx-pagespeed
+      context: ./images/ilari/alpine-nginx-pagespeed
