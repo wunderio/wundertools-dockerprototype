@@ -2,10 +2,10 @@ FROM ilari/alpine-mariadb
 MAINTAINER me@me.me
 
 # Pull some args from the build command line (or docker-compose build: args: )
-ARG MYSQL_ROOT_PASSWORD
-ARG MYSQL_DATABASE
-ARG MYSQL_USER
-ARG MYSQL_PASSWORD
+ARG MYSQL_ROOT_PASSWORD=root
+ARG MYSQL_DATABASE=app
+ARG MYSQL_USER=app
+ARG MYSQL_PASSWORD=app
 
 # Initial db setup
 # - Secure the db, leaving a lame root password, that can be changed in sub images, or in containers
