@@ -14,7 +14,7 @@ ARG MYSQL_PASSWORD
 # - Kill off the demo database
 # - Make our changes take effect
 RUN apk --update add mysql-client && \
-	(/usr/bin/mysqld_safe --socket=/var/run/mariadb/mariadb.sock &) && sleep 1 && \
+	(/usr/bin/mysqld_safe --socket=/var/run/mariadb/mariadb.sock &) && sleep 3 && \
     mysql -S /var/run/mariadb/mariadb.sock -u root -e "UPDATE mysql.user SET Password=PASSWORD('${MYSQL_ROOT_PASSWORD}') WHERE User='root'" && \
     mysql -S /var/run/mariadb/mariadb.sock -u root -e "DELETE FROM mysql.user WHERE User=''" && \
     mysql -S /var/run/mariadb/mariadb.sock -u root -e "DROP DATABASE test" && \
