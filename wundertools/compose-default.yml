@@ -38,18 +38,6 @@
 # db::    image: ilari/alpine-mariadb
 #
 ###
-#
-# JAMES IMAGES
-#
-# These images are a set of centos7 based images that are much less 
-# efficient, and less safe than Ilari's images, but they are ready
-# to work with Drupal out of the box.
-#
-# nginx:: image: jamesnesbitt/wunder-nginx   -- proper php handling
-# php::   image: jamesnesbitt/wunder-nginx   -- better php configuraitons
-# db::    image: jamesnesbitt/wunder-mariadb -- there is no advantage to this
-#
-###
 version: "2"
 services:
 
@@ -107,9 +95,9 @@ services:
     links:
       - db:db.app # fpm sees the db container at URL "db.app"
 
-  ####
-  # IMAGE BUILD OVERRIDES
-  # 
+    ####
+    # IMAGE BUILD OVERRIDES
+    # 
     build: # docker build instructionss
       context: ./images/ilari/alpine-php
 
@@ -124,9 +112,7 @@ services:
   # if you have DNSDOCK set up.  If you aren't using DNSDOCK then it does nothing.
   #
   www:
-    # currently using a built image here until the core image meets our needs
-    #image: ilari/alpine-nginx-pagespeed
-
+    #image: ilari/alpine-nginx-pagespeed # currently using a built image here until the core image meets our needs
     environment:
       # If you are using DNSDOCK, this will assign a local DNS entry
       - DNSDOCK_ALIAS=wunderdemo.docker

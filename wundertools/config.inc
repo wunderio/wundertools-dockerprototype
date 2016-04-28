@@ -58,7 +58,7 @@ DOCKER_IMAGE_DEVELOPERTOOL="jamesnesbitt/wunder-developershell"
 #COMPOSE_NETWORK="bridge"  # this makes docker-compose use the shared docker network interface
 
 
-####################
+################
 # DEFAULT VALUES
 #
 # This section tries to autodetermine various values, if they are not 
@@ -81,7 +81,6 @@ if [ ! -f ~/.gitconfig ]; then
   echo ">> creating host user ~/.gitconfig, in which composer may store a github token, if you provide it.We will use a host file for this, so that the github token is persistant, and doesn't need to be re-entered."
   touch ~/.gitconfig
 fi
-
 
 # Project name
 if [ -z "${PROJECT}" ]; then

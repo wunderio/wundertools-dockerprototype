@@ -26,4 +26,4 @@ RUN /usr/sbin/addgroup -g 1000 app && \
 #   - configure for Drupal http response
 #   - use fpm.app for fastcgi-pass URL
 #   - log to stdout (listen for logs at the container)
-ADD etc/nginx/conf/nginx.conf /etc/nginx/conf/nginx.conf
+ADD etc/nginx/conf.d/drupal.conf /etc/nginx/conf.d/drupal.conf
