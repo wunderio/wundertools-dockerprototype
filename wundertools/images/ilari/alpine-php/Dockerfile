@@ -17,12 +17,6 @@ RUN /usr/sbin/addgroup -g 1000 app && \
 	/usr/sbin/adduser service app
 
 ####
-# Fix missing packages
-RUN apk --update add php7-ctype php7-pdo php7-pdo_mysql php7-pdo_pgsql php7-pdo_sqlite && \
-    rm -rf /tmp/* && \
-    rm -rf /var/cache/apk/*
-
-####
 # Override nginx configuration for Drupal site
 
 # override default php-fpm include conf
