@@ -56,6 +56,8 @@ services:
   # 
   source:
     image: alpine  # in this case, image is irrelvant essentially, as the container never runs
+    networks:
+      - internal  
     command:
       - /bin/true # this is an industry standard hack used with docker-compose
     volumes:
@@ -70,6 +72,8 @@ services:
   #
   db: 
     #image: ilari/alpine-mariadb      # this image comes with no database/user/password
+    networks:
+      - internal
 
     ####
     # IMAGE BUILD OVERRIDES
@@ -83,6 +87,15 @@ services:
         MYSQL_DATABASE: app 
 
   ####
+  # MemCacheD
+  #
+  #
+  memcache:
+    image: ilari/alpine-memcached
+    networks:
+      - internal
+
+  ####
   # FPM node
   #
   # presents a standalone PHP-FPM service which accepts tcp connections.  It links
@@ -91,9 +104,12 @@ services:
   fpm:
     #image: ilari/alpine-nginx-pagespeed # this image doesn't look for source code at /app
     volumes_from:
-      - source  # FPM gets source code from the source container
+      - source  # FPM gets source code from the source container (should be ReadOnly)
     links:
       - db:db.app # fpm sees the db container at URL "db.app"
+      - memcache:memcached.app
+    networks:
+      - internal
 
     ####
     # IMAGE BUILD OVERRIDES
@@ -111,18 +127,44 @@ services:
   # There is an ENV variable here, that would configure DNSDOCK to use a specific URL
   # if you have DNSDOCK set up.  If you aren't using DNSDOCK then it does nothing.
   #
+  # Networks: this image gets public subnet access in order to allowe direct testing
+  # by bypassing the static cache service
+  #
   www:
     #image: ilari/alpine-nginx-pagespeed # currently using a built image here until the core image meets our needs
     environment:
       # If you are using DNSDOCK, this will assign a local DNS entry
-      - DNSDOCK_ALIAS=wunderdemo.docker
+      DNSDOCK_ALIAS: wunderdemo.docker
     volumes_from:
       - source:ro # www gets source code from the source container AS READ ONLY
     links:
       - fpm:fpm.app # www sees the fpm container at URL "fpm.app"
+    networks:
+      - internal
+      - public
 
     ####
     # IMAGE BUILD OVERRIDES
     # 
     build: # docker build instructionss
       context: ./images/ilari/alpine-nginx-pagespeed
+
+  ####
+  # Static cache service
+  #
+  #
+  varnish:
+    image: ilari/alpine-varnish
+    environment:
+      VARNISH_BACKEND_HOST: backend.app
+    links:
+      - www:backend.app
+    networks:
+      - internal
+      - public
+ 
+networks:
+  internal:
+    driver: bridge
+  public:
+    driver: bridge
