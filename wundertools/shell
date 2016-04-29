@@ -5,9 +5,9 @@ source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/config.inc"
 docker run --rm -t -i \
     --net "${COMPOSE_NETWORK}" \
     --hostname=${PROJECT} \
-    --link="${PROJECT}_db:db.app" \
-    --link="${PROJECT}_fpm:fpm.app" \
-    --link="${PROJECT}_www:www.app" \
+    --link="${PROJECT}_db_1:db.app" \
+    --link="${PROJECT}_fpm_1:fpm.app" \
+    --link="${PROJECT}_www_1:www.app" \
     --volume="${PATH_APP}:/app/project" \
     --volume="${PATH_APP}/console:/app/.console" \
     --volume="${PATH_APP}/drush:/app/.drush" \
