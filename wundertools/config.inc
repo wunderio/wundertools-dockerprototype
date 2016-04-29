@@ -98,5 +98,5 @@ export COMPOSE_PROJECT_NAME="${PROJECT}"
 export COMPOSE_FILE="${PATH_WUNDERTOOLS}/compose-default.yml"
 
 if [ -z "${COMPOSE_NETWORK}" ]; then
-    COMPOSE_NETWORK="${PROJECT}_default"
+    COMPOSE_NETWORK="${PROJECT}_internal"
 fi
