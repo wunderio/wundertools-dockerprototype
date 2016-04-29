@@ -2,6 +2,10 @@
 
 source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/config.inc"
 
+CONTAINER_ARGS="${@:1}"
+# echo ">>>>>DOCKER:SHELL START [ARG#:$#][CMD: ${CONTAINER_ARGS}]---[$*]:[$0][$1][$2][$3]
+# "
+
 docker run --rm -t -i \
     --net "${COMPOSE_NETWORK}" \
     --hostname=${PROJECT} \
@@ -16,4 +20,7 @@ docker run --rm -t -i \
     --name="${PROJECT}_shell" \
     --user=app \
     ${DOCKER_IMAGE_DEVELOPERTOOL} \
-    ${@}
+    ${CONTAINER_ARGS}
+
+# echo "
+# <<<<<DOCKER:SHELL END "

@@ -2,6 +2,10 @@
 
 source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/config.inc"
 
+CONTAINER_ARGS="${@:1}"
+#echo ">>>>>DOCKER:COMPOSER START [CMD: ${CONTAINER_ARGS}]
+#"
+
 docker run --rm -t -i \
     --net "${COMPOSE_NETWORK}" \
     --hostname=${PROJECT} \
@@ -12,4 +16,8 @@ docker run --rm -t -i \
     -w=/app/project \
     --name="${PROJECT}_composer" \
     jamesnesbitt/wunder-developershell \
-    --working-dir=/app/project ${@}
+    --working-dir=/app/project \
+    ${CONTAINER_ARGS}
+
+#echo "
+#<<<<<DOCKER:COMPOSER END "

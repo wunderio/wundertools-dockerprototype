@@ -21,17 +21,17 @@ PATH_HOME="${PATH_HOME:-${HOME}}"
 PATH_PROJECT="${PATH_EXECUTION}"
 while [ -n "${PATH_PROJECT}" ]; do
   if [ "${PATH_PROJECT}" == "${PATH_HOME}" ]; then
-  	echo "Could not find any wundertools project."
+    echo "Could not find any wundertools project."
     exit 1;
   fi
   if [ "${PATH_PROJECT}" == "/" ]; then
 
-  	echo "Could not find any wundertools project."
+    echo "Could not find any wundertools project."
     exit 1;
   fi
   if [ "${PATH_PROJECT}" == "" ]; then
 
-  	echo "Could not find any wundertools project."
+    echo "Could not find any wundertools project."
     exit 1;
   fi
   if [ -d "${PATH_PROJECT}${SUBPATH_WUNDERTOOLS}" ]; then
@@ -42,14 +42,15 @@ while [ -n "${PATH_PROJECT}" ]; do
   PATH_PROJECT="$(dirname "${PATH_PROJECT}")"
 done
 
-COMMAND=$1
-ARGS=${@:2}
+COMMAND="$1"
+shift
+ARGS="$@"
 
 #echo "WUNDERTOOLS RUN [PROJECT:${PATH_PROJECT}][WUNDERTOOLS:${PATH_WUNDERTOOLS}][COMMAND:${COMMAND}][ARGS: ${ARGS}"
 
 if [ ! -x "${PATH_WUNDERTOOLS}/${COMMAND}" ]; then
-	echo "No matching command found: ${COMMAND}"
-	exit 1
+  echo "No matching command found: ${COMMAND}"
+  exit 1
 fi
 
 source "${PATH_WUNDERTOOLS}/${COMMAND}" ${ARGS}
