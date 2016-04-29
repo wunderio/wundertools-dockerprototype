@@ -7,6 +7,10 @@ if [ ! -f "${PATH_APP}/vendor/bin/drush" ]; then
   exit 1
 fi
 
+CONTAINER_ARGS="${@:1}"
+# echo ">>>>>DOCKER:DRUSH START [CMD: ${CONTAINER_ARGS}]
+# "
+
 docker run --rm -t -i \
     --net "${COMPOSE_NETWORK}" \
     --hostname=${PROJECT} \
@@ -19,4 +23,7 @@ docker run --rm -t -i \
     --entrypoint=/app/project/vendor/bin/drush \
     --user=app \
     ${DOCKER_IMAGE_DEVELOPERTOOL} \
-    ${@}
+    ${CONTAINER_ARGS}
+
+# echo "
+# <<<<<DOCKER:DRUSH END "

@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+######
+# Run gulp in a containter
+#
+# This script runs a command container, using gulp in a specifiec folder
+#
+# The container tries to run gulp $@ in a specified path, which should contain
+# a gulpfile.
+#
+# Note that the folder must be in the app/ path, as this is mapped into 
+# the container, at a predictable point:
+#   host: ./app  -> container: /app/project
+# So that any subpath is easily remapped:
+#   host: ./app/web/themes/custom/MyTheme -> container: /app/project/web/themes/custom/MyTheme
+#
+# You can easily alter this, as long as you are aware of how files are
+# mapped in the container.
+#
+
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/config.inc"
+
+GULP_SUB_PATH="${1}"
+GULP_PATH="${PATH_APP}/${GULP_SUB_PATH}"
+
+if [ ! -d "${GULP_PATH}" ]; then
+	echo "You specified a gulp path that does not exist: ${GULP_PATH}"
+	exit 1
+fi
+
+GULP_FILE="${GULP_PATH}/gulpfile.js"
+if [ ! -f "${GULP_FILE}" ]; then
+	echo "You specified a gulp path that does not containe a gulpfile.js: ${GULP_FILE}"
+	exit 1
+fi
+
+CONTAINER_ARGS=""
+if [ "$*" !== "$1" ]; then
+  CONTAINER_ARGS="${@:1}"
+fi
+# echo ">>>>>DOCKER:GULP START [CMD: ${CONTAINER_ARGS}]
+# "
+
+docker run --rm -t -i \
+    --net "${COMPOSE_NETWORK}" \
+    --hostname=${PROJECT} \
+    --volume="${PATH_APP}:/app/project" \
+    --volume="${PATH_HOME}/.gitconfig:/app/.gitconfig" \
+    --volume="${PATH_HOME}/.ssh:/app/.ssh" \
+    --entrypoint=/usr/bin/composer \
+    -w=/app/project \
+    --name="${PROJECT}_composer" \
+    jamesnesbitt/wunder-developershell \
+    --working-dir=/app/project
+    ${CONTAINER_ARGS}
+
+# echo "
+# <<<<<DOCKER:GULP END "

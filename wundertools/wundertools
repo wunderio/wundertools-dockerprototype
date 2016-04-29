@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+#####
+# lib executable for wundertools
+#
+# This is a centralized executable for wundertools. it is meant to allow
+# running wundertools commands from anywhere inside your project.
+#
+# To use it, copy of symlimk it to any PATH location, such as ~/bin/wundertools
+# and make sure that it is executable.
+#
+
+# subpath that marks a wundertools project
+SUBPATH_WUNDERTOOLS="/wundertools"
+
+# path executed from
+PATH_EXECUTION="${PATH_EXECUTION:-`pwd`}"
+# path to user home folder (in case)
+PATH_HOME="${PATH_HOME:-${HOME}}"
+
+# Determine project root, and data paths
+PATH_PROJECT="${PATH_EXECUTION}"
+while [ -n "${PATH_PROJECT}" ]; do
+  if [ "${PATH_PROJECT}" == "${PATH_HOME}" ]; then
+    echo "Could not find any wundertools project."
+    exit 1;
+  fi
+  if [ "${PATH_PROJECT}" == "/" ]; then
+
+    echo "Could not find any wundertools project."
+    exit 1;
+  fi
+  if [ "${PATH_PROJECT}" == "" ]; then
+
+    echo "Could not find any wundertools project."
+    exit 1;
+  fi
+  if [ -d "${PATH_PROJECT}${SUBPATH_WUNDERTOOLS}" ]; then
+    PATH_WUNDERTOOLS="${PATH_PROJECT}${SUBPATH_WUNDERTOOLS}"
+    break
+  fi
+
+  PATH_PROJECT="$(dirname "${PATH_PROJECT}")"
+done
+
+COMMAND="$1"
+shift
+ARGS="$@"
+
+#echo "WUNDERTOOLS RUN [PROJECT:${PATH_PROJECT}][WUNDERTOOLS:${PATH_WUNDERTOOLS}][COMMAND:${COMMAND}][ARGS: ${ARGS}"
+
+if [ ! -x "${PATH_WUNDERTOOLS}/${COMMAND}" ]; then
+  echo "No matching command found: ${COMMAND}"
+  exit 1
+fi
+
+source "${PATH_WUNDERTOOLS}/${COMMAND}" ${ARGS}
