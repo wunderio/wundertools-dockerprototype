@@ -19,15 +19,15 @@
 # root path basename, but you can use this to override it.
 #
 #
-PROJECT=""
+#PROJECT=""
 
 ###
 # Some important paths used in the app.  These are autodetermined by
 # default to be ./app and ./wundertools from your root project, but
 # I guess that you could override them here.
 #
-PATH_APP=""
-PATH_WUNDERTOOLS=""
+#PATH_APP=""
+#PATH_WUNDERTOOLS=""
 
 ###
 # A docker image that can be used for developer shell and commands
@@ -98,5 +98,5 @@ export COMPOSE_PROJECT_NAME="${PROJECT}"
 export COMPOSE_FILE="${PATH_WUNDERTOOLS}/compose-default.yml"
 
 if [ -z "${COMPOSE_NETWORK}" ]; then
-    COMPOSE_NETWORK="${PROJECT}_default"
+    COMPOSE_NETWORK="${PROJECT}_internal"
 fi
