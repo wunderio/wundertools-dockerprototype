@@ -96,7 +96,7 @@ services:
   # to the DB using the URL db.app and pulls source code form the source node volumes
   #
   fpm:
-    image: jamesnesbitt/alping-php-app # this image doesn't look for source code at /app
+    image: jamesnesbitt/alpine-php-app # this image doesn't look for source code at /app
     volumes_from:
       - source  # FPM gets source code from the source container (should be ReadOnly)
     links:
