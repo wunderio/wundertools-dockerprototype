@@ -65,6 +65,15 @@ DOCKER_IMAGE_DEVELOPERTOOL="jamesnesbitt/wunder-developershell"
 # already manually defined above.
 #
 
+#
+# PATHS
+#
+
+# some commands might want to be able to refer to the active path?
+if [ -z "${PATH_EXECUTION}" ]; then
+    PATH_EXECUTION="$(pwd)"
+fi
+
 # App project root
 #
 # PATH_APP : the path to the application root
@@ -82,10 +91,18 @@ if [ ! -f ~/.gitconfig ]; then
   touch ~/.gitconfig
 fi
 
+#
+# GENERIC
+#
+
 # Project name
 if [ -z "${PROJECT}" ]; then
     PROJECT="$(basename $(cd ${PATH_APP} && cd ../ && pwd))"
 fi
+
+#
+# DOCKER COMPOSE
+#
 
 # dev image
 if [ -z "${DOCKER_IMAGE_DEVELOPERTOOL}" ]; then
@@ -98,5 +115,5 @@ export COMPOSE_PROJECT_NAME="${PROJECT}"
 export COMPOSE_FILE="${PATH_WUNDERTOOLS}/compose-default.yml"
 
 if [ -z "${COMPOSE_NETWORK}" ]; then
-    COMPOSE_NETWORK="${PROJECT}_internal"
+    COMPOSE_NETWORK="${PROJECT}_default"
 fi
