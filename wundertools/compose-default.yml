@@ -55,9 +55,7 @@ services:
   # develop that functionality yet.
   # 
   source:
-    image: alpine  # in this case, image is irrelvant essentially, as the container never runs
-    networks:
-      - internal  
+    image: jamesnesbitt/alpine-base
     command:
       - /bin/true # this is an industry standard hack used with docker-compose
     volumes:
@@ -71,20 +69,18 @@ services:
   # Presents a standalone DB server with an open port
   #
   db: 
-    #image: ilari/alpine-mariadb      # this image comes with no database/user/password
-    networks:
-      - internal
+    image: jamesnesbitt/alpine-mariadb-app      # this image comes with no database/user/password
 
     ####
     # IMAGE BUILD OVERRIDES
     #
-    build: # docker build instructionss
-      context: ./images/ilari/alpine-mariadb
-      args: # arguments used only during build
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_USER: app
-        MYSQL_PASSWORD: app
-        MYSQL_DATABASE: app 
+    #build: # docker build instructionss
+    #  context: ./images/ilari/alpine-mariadb
+    #  args: # arguments used only during build
+    #    MYSQL_ROOT_PASSWORD: root
+    #    MYSQL_USER: app
+    #    MYSQL_PASSWORD: app
+    #    MYSQL_DATABASE: app 
 
   ####
   # MemCacheD
@@ -92,8 +88,6 @@ services:
   #
   memcache:
     image: ilari/alpine-memcached
-    networks:
-      - internal
 
   ####
   # FPM node
@@ -102,20 +96,12 @@ services:
   # to the DB using the URL db.app and pulls source code form the source node volumes
   #
   fpm:
-    #image: ilari/alpine-nginx-pagespeed # this image doesn't look for source code at /app
+    image: jamesnesbitt/alpine-php-app # this image doesn't look for source code at /app
     volumes_from:
       - source  # FPM gets source code from the source container (should be ReadOnly)
     links:
       - db:db.app # fpm sees the db container at URL "db.app"
       - memcache:memcached.app
-    networks:
-      - internal
-
-    ####
-    # IMAGE BUILD OVERRIDES
-    # 
-    build: # docker build instructionss
-      context: ./images/ilari/alpine-php
 
   ####
   # WWW node
@@ -131,7 +117,7 @@ services:
   # by bypassing the static cache service
   #
   www:
-    #image: ilari/alpine-nginx-pagespeed # currently using a built image here until the core image meets our needs
+    image: jamesnesbitt/alpine-nginx-pagespeed-app
     environment:
       # If you are using DNSDOCK, this will assign a local DNS entry
       DNSDOCK_ALIAS: wunderdemo.docker
@@ -139,15 +125,8 @@ services:
       - source:ro # www gets source code from the source container AS READ ONLY
     links:
       - fpm:fpm.app # www sees the fpm container at URL "fpm.app"
-    networks:
-      - internal
-      - public
-
-    ####
-    # IMAGE BUILD OVERRIDES
-    # 
-    build: # docker build instructionss
-      context: ./images/ilari/alpine-nginx-pagespeed
+    ports:
+      - "8081:80"
 
   ####
   # Static cache service
@@ -159,12 +138,16 @@ services:
       VARNISH_BACKEND_HOST: backend.app
     links:
       - www:backend.app
-    networks:
-      - internal
-      - public
- 
-networks:
-  internal:
-    driver: bridge
-  public:
-    driver: bridge
+    ports:
+      - "8080:80"
+
+####
+# Networks
+#
+# Originally we were using a pair of networks for separation testing, but this did
+# not function with the Docker-Beta Mac client
+#networks:
+#  public:
+#    driver: bridge
+#  private:
+#    driver: bridge

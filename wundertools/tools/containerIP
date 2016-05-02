@@ -46,6 +46,8 @@ function getContainerIP {
 
 # DEFAULT NETWORK
 outputContainerIP $PROJECT $NODE
+# DEFAULT NETWORK
+outputContainerIP $PROJECT $NODE "default"
 # INTERNAL NETWORK
 outputContainerIP $PROJECT $NODE "internal"
 # BACKEND NETWORK
