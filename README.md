@@ -60,8 +60,7 @@ Get more information by looking in the wundertools/docs
 
 ### DNS
 
-*** DNS is an open topic that we have not resolved. Consider just using host 
-file entries for now.
+*** DNS is an open topic that we have not resolved. Consider just using hostfile entries for now.
 
 #### /etc/hosts
 
@@ -72,30 +71,3 @@ You can usually rely on a direct route to your container.  To find the IP for an
 *** Note that on some docker setups, the host has not routed container traffic 
 to the docker subnet (bad host) and so a manual route may be necessary.  The OSX Beta client seems to have this issue, but no route seems avaialable.
 
-#### DNSDOCK
-
-Currently we are considering playing with DNS Dock: 
-https://github.com/tonistiigi/dnsdock
-
-### DNS
-
-#### Current quick and dirty solution:
-
-- Run `docker ps` and get the name of the web service container
-- Run  "./wundertools/tool/containerIP www" to find you container IP (or Run `docker inspect --format '{{ .NetworkSettings.IPAddress }}' <CONTAINER_NAME>` (where `<CONTAINER_NAME>` is the name of the container from the previous step). This will give you the IP address of the container.)
-- Add an entry to `/etc/hosts` with `<CONTAINER_IP> wunderdemo.local.wunder.io`
-
-This approach is not great, we know it and we'll fix it once Docker for Mac/Windows is out of private beta.  The advantage of this approach is the it means that this tool does not have to manage your OSX network at all, so it won't break it.
-
-#### Longer term solution
-
-We are considering playing with DNS Dock: https://github.com/tonistiigi/dnsdock, but at the moment this doesn't work reliably on OS X with boot2docker.
-
-Using this approach will require that you run a container on your machine that 
-runs DNS, and then you tell you host to use it as a DNS server
-
-##### DNSDOCK with docker-machine
-
-You will need to run DNSDOCk and attach the dns service to the docker-machine IP
-
-    $/> docker run --detach=true --volume=/var/run/docker.sock:/var/run/docker.sock --name=dnsdock --publish=$(docker-machine ip default):53:53/udp tonistiigi/dnsdock
