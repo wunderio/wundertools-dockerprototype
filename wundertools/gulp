@@ -32,7 +32,7 @@ docker run --rm -t -i \
     --entrypoint=/usr/bin/gulp \
     -w=/app/project \
     --name="${PROJECT}_composer" \
-    jamesnesbitt/wunder-developershell \
+    ${DOCKER_IMAGE_DEVELOPERTOOL} \
     ${CONTAINER_ARGS}
 
 # echo "

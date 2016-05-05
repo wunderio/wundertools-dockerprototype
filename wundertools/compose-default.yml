@@ -110,7 +110,7 @@ services:
   #
   fpm:
     #image: quay.io/wunder/alpine-php-app
-    image: jamesnesbitt/alpine-php-app 
+    image: jamesnesbitt/alpine-php-app
     volumes_from:
       - source  # FPM gets source code from the source container (should be ReadOnly)
     links:
