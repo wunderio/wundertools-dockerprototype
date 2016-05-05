@@ -10,6 +10,7 @@
 #
 
 # subpath that marks a wundertools project
+# @NOTE if this is empty it breaks stuff
 SUBPATH_WUNDERTOOLS="/wundertools"
 
 # path executed from

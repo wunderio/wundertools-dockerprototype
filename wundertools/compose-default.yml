@@ -24,58 +24,65 @@
 # - Any image builds should push directly to hosted images, which can 
 #   be used in production.
 #
-###
-#
-# ILARI IMAGES
-#
-# This compose uses a number of Alpine images that Ilari is working
-# on.  These will likely be the commonly used images for WunderTools
-# but they are not yet ready for use, as they miss some drupal specific
-# configuration.
-#
-# nginx:: image: ilari/alpine-nginx-pagespeed
-# php::   image: ilari/alpine-php
-# db::    image: ilari/alpine-mariadb
-#
-###
+####
+
+####
+# This file uses docker-compose version 2 syntax.  It doesn't really need 
+# to though, so if this gives you problems, test it without the version
+# and services lines.
 version: "2"
+
+####
+# The following services are considered a part of this application
+#
 services:
 
   ####
   # SOURCE
   #
-  # Create a container for source code [this should be an image with source code]
+  # Create a container for source code 
+  # [In production this should be an image with source code in the build]
   #
   # This container has a "CMD" but it never needs to run as it is used only as
   # a source of "volume" from which other containers get their source code.
+  # When the service stars, it will exit with 0, which is expected.
   #
   # In development, we overlay the host code to get local file access, but in 
-  # production we want an image that has source code built in. We can use 
-  # wundertools to build source images easily, but there is no need for us to 
-  # develop that functionality yet.
+  # production we want an image that has source code built in.
   # 
   source:
-    image: jamesnesbitt/alpine-base
+    image: quay.io/wunder/wunder-alpine-base
     command:
       - /bin/true # this is an industry standard hack used with docker-compose
     volumes:
       # Here we overlay local source on top of where the built source code 
       # would be in a production ready source image.
-      - ../app:/app/project 
+      - ../app/web:/app/web 
+      - ../app/vendor:/app/vendor
 
   ####
   # DB node 
   #
   # Presents a standalone DB server with an open port
   #
+  # This image has a defaul db already created.  If you'd like to have a custom
+  # db and db credentials, comment out the "image:" line, and uncomment the 
+  # build section, where you can set credentials.
+  #
   db: 
-    image: jamesnesbitt/alpine-mariadb-app      # this image comes with no database/user/password
+    #image: quay.io/wunder/alpine-mariadb
+    image: jamesnesbitt/alpine-mariadb
 
     ####
     # IMAGE BUILD OVERRIDES
     #
-    #build: # docker build instructionss
-    #  context: ./images/ilari/alpine-mariadb
+    # If you want custom credentials, consider commenting out the 
+    # db: "image:" line, and uncommenting this.  It will give you a custom
+    # db image for your app, with credentials as suggested below.
+    # The default values are show.
+    #
+    #build:
+    #  context: ./images/ilari/alpine-mariadb-app
     #  args: # arguments used only during build
     #    MYSQL_ROOT_PASSWORD: root
     #    MYSQL_USER: app
@@ -85,9 +92,12 @@ services:
   ####
   # MemCacheD
   #
+  # A running memcacheD service, that the fpm container links to.
+  # The fpm container has a settings: links: memcache:memcached.app
+  # which makes this container available at URL "memcache.app"
   #
   memcache:
-    image: ilari/alpine-memcached
+    image: quay.io/wunder/alpine-memcached
 
   ####
   # FPM node
@@ -96,12 +106,12 @@ services:
   # to the DB using the URL db.app and pulls source code form the source node volumes
   #
   fpm:
-    image: jamesnesbitt/alpine-php-app # this image doesn't look for source code at /app
+    image: jamesnesbitt/alpine-php-app 
     volumes_from:
       - source  # FPM gets source code from the source container (should be ReadOnly)
     links:
       - db:db.app # fpm sees the db container at URL "db.app"
-      - memcache:memcached.app
+      - memcache:memcached.app # fpm sees the memcached container at URL "memcached.app"
 
   ####
   # WWW node
@@ -113,41 +123,43 @@ services:
   # There is an ENV variable here, that would configure DNSDOCK to use a specific URL
   # if you have DNSDOCK set up.  If you aren't using DNSDOCK then it does nothing.
   #
-  # Networks: this image gets public subnet access in order to allowe direct testing
-  # by bypassing the static cache service
+  # You can reach this container: http://localhost:8081
+  # (as configured in the ports section)
   #
   www:
     image: jamesnesbitt/alpine-nginx-pagespeed-app
     environment:
       # If you are using DNSDOCK, this will assign a local DNS entry
-      DNSDOCK_ALIAS: wunderdemo.docker
+      DNSDOCK_ALIAS: www.wunderdemo.docker
     volumes_from:
       - source:ro # www gets source code from the source container AS READ ONLY
     links:
-      - fpm:fpm.app # www sees the fpm container at URL "fpm.app"
+      # map the fpm container to URL "fpm.app"
+      - fpm:fpm.app
     ports:
+      # currently portmapping port 80 to the host 8081
       - "8081:80"
 
   ####
   # Static cache service
   #
+  # This container passes off to the www container, as configured using
+  # the env variable and link.  www is available at the url backend.app
+  # inside the container.
+  #
+  # You can reach this container: http://localhost:8080
+  # (as configured in the ports section)
   #
   varnish:
-    image: ilari/alpine-varnish
+    image: quay.io/wunder/alpine-varnish
     environment:
+      # If you are using DNSDOCK, this will assign a local DNS entry
+      DNSDOCK_ALIAS: varnish.wunderdemo.docker
+      # this is an image variable, which is used to configure the varnish vcl
       VARNISH_BACKEND_HOST: backend.app
     links:
+      # map the www container to URL backend.app
       - www:backend.app
     ports:
+      # currently portmapping port 80 to the host 8080
       - "8080:80"
-
-####
-# Networks
-#
-# Originally we were using a pair of networks for separation testing, but this did
-# not function with the Docker-Beta Mac client
-#networks:
-#  public:
-#    driver: bridge
-#  private:
-#    driver: bridge
