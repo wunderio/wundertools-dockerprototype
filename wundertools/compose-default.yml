@@ -69,6 +69,9 @@ services:
   # db and db credentials, comment out the "image:" line, and uncomment the 
   # build section, where you can set credentials.
   #
+  # by default: mysql://app:app@db.app/app
+  #   where db.app is define in fpm: links: below
+  #
   db: 
     #image: quay.io/wunder/alpine-mariadb
     image: jamesnesbitt/alpine-mariadb
@@ -82,7 +85,7 @@ services:
     # The default values are show.
     #
     #build:
-    #  context: ./images/ilari/alpine-mariadb-app
+    #  context: ./images/james/alpine-mariadb-app
     #  args: # arguments used only during build
     #    MYSQL_ROOT_PASSWORD: root
     #    MYSQL_USER: app
@@ -106,6 +109,7 @@ services:
   # to the DB using the URL db.app and pulls source code form the source node volumes
   #
   fpm:
+    #image: quay.io/wunder/alpine-php-app
     image: jamesnesbitt/alpine-php-app 
     volumes_from:
       - source  # FPM gets source code from the source container (should be ReadOnly)
@@ -127,6 +131,7 @@ services:
   # (as configured in the ports section)
   #
   www:
+    #image: quay.io/wunder/alpine-nginx-pagespeed-app
     image: jamesnesbitt/alpine-nginx-pagespeed-app
     environment:
       # If you are using DNSDOCK, this will assign a local DNS entry
