@@ -9,7 +9,10 @@ CONTAINER_ARGS="${@:1}"
 docker run --rm -t -i \
     --net "${COMPOSE_NETWORK}" \
     --hostname=${PROJECT} \
-    --volume="${PATH_APP}:/app/project" \
+    --volume="${PATH_APP}/web:/app/web" \
+    --volume="${PATH_APP}/vendor:/app/vendor" \
+    --volume="${PATH_APP}/scripts:/app/scripts" \
+    --volume="${PATH_APP}/composer.json:/app/composer.json" \
     --volume="${PATH_HOME}/.gitconfig:/app/.gitconfig" \
     --volume="${PATH_HOME}/.ssh:/app/.ssh" \
     --entrypoint=/usr/bin/composer \

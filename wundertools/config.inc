@@ -34,12 +34,10 @@
 # Some of the command scripts use this image to run containers as
 # commands; this image provides a base starting point for those
 # containers.
-# The default image is an old centos build, with various php-cli
-# extensions, composer, gulp and zsh installed.
 # It is easier to maintain a single image for this, although each
 # container could of course use it's own image.
 #
-DOCKER_IMAGE_DEVELOPERTOOL="jamesnesbitt/wunder-developershell"
+DOCKER_IMAGE_DEVELOPERTOOL="quay.io/wunder/alpine-developershell-james"
 
 #######################################
 # THINGS THAT AREN'T ALWAYS WORKING YET
@@ -107,7 +105,7 @@ fi
 # dev image
 if [ -z "${DOCKER_IMAGE_DEVELOPERTOOL}" ]; then
 	# this is just some old image that I (James) have been using for a while.
-    DOCKER_IMAGE_DEVELOPERTOOL="jamesnesbitt/wunder-developershell"
+    DOCKER_IMAGE_DEVELOPERTOOL="quay.io/wunder/alpine-developershell-james"
 fi
 
 # Set some vars use by Docker-Compose. This may not be necessary for us.

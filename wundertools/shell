@@ -12,11 +12,14 @@ docker run --rm -t -i \
     --link="${PROJECT}_db_1:db.app" \
     --link="${PROJECT}_fpm_1:fpm.app" \
     --link="${PROJECT}_www_1:www.app" \
-    --volume="${PATH_APP}:/app/project" \
+    --volume="${PATH_APP}/web:/app/web" \
+    --volume="${PATH_APP}/vendor:/app/vendor" \
+    --volume="${PATH_APP}/scripts:/app/scripts" \
+    --volume="${PATH_APP}/composer.json:/app/composer.json" \
     --volume="${PATH_APP}/console:/app/.console" \
     --volume="${PATH_APP}/drush:/app/.drush" \
     --volume="${PATH_HOME}/.ssh:/app/.ssh" \
-    -w=/app/project \
+    -w=/app \
     --name="${PROJECT}_shell" \
     --user=app \
     ${DOCKER_IMAGE_DEVELOPERTOOL} \
