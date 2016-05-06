@@ -74,7 +74,7 @@ services:
   #
   db: 
     #image: quay.io/wunder/alpine-mariadb
-    image: jamesnesbitt/alpine-mariadb
+    image: jamesnesbitt/alpine-mariadb-app
 
     ####
     # IMAGE BUILD OVERRIDES
