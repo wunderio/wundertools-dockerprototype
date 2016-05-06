@@ -1,4 +1,6 @@
-# Wunder-Tools 
+# Wunder-Tools behavioural prototype
+
+This project is a simple behavoural prototype, to see what we would want from a docker based tool.
 
 ## Layout
 
