@@ -1,0 +1,179 @@
+@import "breakpoint";
+@import "singularitygs";
+@import "../variables/_mixins.scss";
+@import "../variables/_colors.scss";
+@import "../variables/_breakpoints.scss";
+
+// Set Singularity grid
+@include add-grid(1);
+@include add-grid(12 at $tab);
+@include add-grid(24 at $desk);
+
+@include add-gutter(20px);
+
+// Debug mode for your grid visualization so show up:
+// @include sgs-change('debug', true);
+
+// .l-wrapper {
+//   @include background-grid($color: #f7f7f7);
+// }
+
+
+.l-container {
+  width: 100%;
+  min-width: 320px;
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
+  // position: relative;
+}
+
+.l-wrapper {
+  max-width: 1024px;
+  margin: 0 auto;
+  @include clearfix();
+}
+
+.l-header,
+.region-header,
+.l-main,
+.l-footer {
+  @include clearfix();
+}
+
+.l-sidebar-first,
+.l-sidebar-second,
+.l-content {
+  box-sizing: border-box;
+}
+
+// Header
+//---------------------------------
+.l-header {
+  background-color: #fff;
+  padding: 0 20px;
+  margin-bottom: 10px;
+  @include breakpoint($tab) {
+    margin-bottom: 30px;
+  }
+  position: relative;
+  z-index: 50;
+}
+// Sidebar
+//---------------------------------
+.region-sidebar-first {
+  // padding: 0 20px;
+}
+.l-main {
+  .l-wrapper {
+    padding: 0 20px;
+  }
+}
+// Content
+//---------------------------------
+.l-content {
+  padding: 20px 0;
+  @include breakpoint($tab) {
+    padding: 20px;
+    margin-bottom: 30px;
+  }
+}
+// Footer
+//---------------------------------
+.l-footer {
+  background: $color-footer-background;
+  color: $color-footer-text;
+  .l-wrapper {
+    padding: 20px;
+  }
+}
+// Sidebars and content layout
+//---------------------------------
+@include breakpoint($tab) {
+   /* Sidebars */
+  .layout-one-sidebar {
+    .l-sidebar-first,
+    .l-sidebar-second {
+      @include grid-span(3, 1);
+    }
+    .l-content {
+      @include grid-span(9, 4, $gutter: 0);
+    }
+  }
+  .layout-two-sidebars {
+    .l-sidebar-first {
+      @include grid-span(2, 1);
+    }
+    .l-sidebar-second {
+      @include grid-span(2, 10);
+    }
+  }
+}
+
+@include breakpoint($desk, true) {
+  /* Content Area */
+  .layout-no-sidebars {
+    .l-content {
+      @include grid-span(24, 1, $gutter: 0);
+    }
+  }
+
+  /* Sidebars */
+  .layout-one-sidebar {
+    .l-sidebar-first,
+    .l-sidebar-second {
+      @include grid-span(6, 1);
+    }
+    .l-content {
+      @include grid-span(18, 7, $gutter: 0);
+    }
+  }
+  .layout-two-sidebars {
+    .l-sidebar-first {
+      @include grid-span(1, 1);
+    }
+    .l-sidebar-second {
+      @include grid-span(1, 3);
+    }
+  }
+}
+
+// Grid
+//-----------------------------
+// Without technique of floats, because boxes need to align left, right and center.
+@include breakpoint($tab) {
+  .grid-50 .box,
+  .l-50 {
+    width: column-span(6, 1, 12, 0.5);
+    margin-right: gutter-span(0.5, 12);
+    &:nth-of-type(2n+2) {
+      margin-right: 0;
+    }
+  }
+  .grid-30 .box,
+  .l-30 {
+    width: column-span(4, 1, 12, 0.5);
+    margin-right: gutter-span(0.5, 12);
+    &:nth-of-type(3n+3) {
+      margin-right: 0;
+    }
+  }
+}
+
+.grid-25 .box,
+.l-25 {
+  @include breakpoint($tab $desk, true) {
+    width: column-span(6, 1, 12, 0.5);
+    margin-right: gutter-span(0.5, 12);
+    &:nth-of-type(2n+2) {
+      margin-right: 0;
+    }
+  }
+  @include breakpoint($desk, true) {
+    width: column-span(3, 1, 12, 0.5);
+    margin-right: gutter-span(0.5, 12);
+    &:nth-of-type(4n+4) {
+      margin-right: 0;
+    }
+  }
+}

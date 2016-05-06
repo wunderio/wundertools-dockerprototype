@@ -1,0 +1,19 @@
+/**
+ * @file
+ * Visual styles for Staticbase forms.
+ */
+
+input.form-text,
+input.form-tel,
+input.form-email,
+input.form-url,
+input.form-search,
+input.form-file,
+input.form-number,
+input.form-color,
+textarea.form-textarea,
+select.form-select {
+  padding: 0.4em 0.6em;
+  border: 1px solid #ccc;
+  color: #3b3b3b;
+}
