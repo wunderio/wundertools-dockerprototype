@@ -19,7 +19,8 @@
 
 source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/config.inc"
 
-PATH_GULP="${PATH_EXECUTION:-${PATH_APP}}"
+# use the run path for execution
+PATH_GULP="${PATH_EXECUTION}"
 
 CONTAINER_ARGS="${@:1}"
 # echo ">>>>>DOCKER:GULP START [CMD: ${CONTAINER_ARGS}]
@@ -27,10 +28,10 @@ CONTAINER_ARGS="${@:1}"
 
 docker run --rm -t -i \
     --net "${COMPOSE_NETWORK}" \
-    --hostname=${PROJECT} \
-    --volume="${PATH_GULP}:/app/project" \
-    --entrypoint=/usr/bin/gulp \
-    -w=/app/project \
+    --hostname="${PROJECT}" \
+    --volume="${PATH_GULP}:/app/gulptarget" \
+    --entrypoint="/usr/bin/gulp" \
+    -w=/app/gulptarget \
     --name="${PROJECT}_composer" \
     ${DOCKER_IMAGE_DEVELOPERTOOL} \
     ${CONTAINER_ARGS}
