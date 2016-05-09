@@ -103,6 +103,7 @@ fi
 
 # perform some sanity checks on the project name, to make it safe for docker networks and container names
 PROJECT="${PROJECT,,}" # lower case
+PROJECT="$(echo "${PROJECT}" | tr '[:upper:]' '[:lower:]' | tr -cd '[:alnum:]')"
 
 #
 # DOCKER COMPOSE
