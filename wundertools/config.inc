@@ -18,13 +18,15 @@
 # images that the system will build.  By default it uses the project
 # root path basename, but you can use this to override it.
 #
+# @NOTE keep this [a-z] and [0-9] for your own sanity
 #
-#PROJECT=""
+#PROJECT="myproject"
 
 ###
 # Some important paths used in the app.  These are autodetermined by
 # default to be ./app and ./wundertools from your root project, but
 # I guess that you could override them here.
+#
 #
 #PATH_APP=""
 #PATH_WUNDERTOOLS=""
@@ -37,7 +39,7 @@
 # It is easier to maintain a single image for this, although each
 # container could of course use it's own image.
 #
-DOCKER_IMAGE_DEVELOPERTOOL="quay.io/wunder/alpine-developershell-james"
+#DOCKER_IMAGE_DEVELOPERTOOL=""
 
 #######################################
 # THINGS THAT AREN'T ALWAYS WORKING YET
@@ -46,14 +48,9 @@ DOCKER_IMAGE_DEVELOPERTOOL="quay.io/wunder/alpine-developershell-james"
 # In general each section here has it's own documentation describing it's issue
 
 
-#
-# Networking id and bridge problem.
-#
-# ERROR: docker: Error response from daemon: network {SOMETHING}_default not found.
-# SHORT ANSWER: try setting this: COMPOSE_NETWORK="bridge"
-# LONG ANSWER: do "docker inspect $CONTAINER" on one of your containers and look for "Networks": {"{NETWORK}"
-#
-#COMPOSE_NETWORK="bridge"  # this makes docker-compose use the shared docker network interface
+
+# nothing here right now
+
 
 
 ################
@@ -80,8 +77,14 @@ fi
 if [ -z "${PATH_WUNDERTOOLS}" ]; then
     PATH_WUNDERTOOLS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 fi
+
+
+SUBPATH_APP="app" # @NOTE THAT IF YOU CHANGE THIS, YOU MIGHT NEED TO CHANGE THE YML FILE BINDS TO MATCH 
+if [ -z "${SUBPATH_APP}" ]; then
+    SUBPATH_APP="app"
+fi
 if [ -z "${PATH_APP}" ]; then
-    PATH_APP="$( cd "$( dirname "${PATH_WUNDERTOOLS}" )" && pwd )/app"
+    PATH_APP="$( cd "$( dirname "${PATH_WUNDERTOOLS}" )" && pwd )/${SUBPATH_APP}"
 fi
 
 if [ ! -f ~/.gitconfig ]; then
@@ -98,6 +101,9 @@ if [ -z "${PROJECT}" ]; then
     PROJECT="$(basename $(cd ${PATH_APP} && cd ../ && pwd))"
 fi
 
+# perform some sanity checks on the project name, to make it safe for docker networks and container names
+PROJECT="${PROJECT,,}" # lower case
+
 #
 # DOCKER COMPOSE
 #
@@ -105,7 +111,7 @@ fi
 # dev image
 if [ -z "${DOCKER_IMAGE_DEVELOPERTOOL}" ]; then
 	# this is just some old image that I (James) have been using for a while.
-    DOCKER_IMAGE_DEVELOPERTOOL="quay.io/wunder/alpine-developershell-james"
+    DOCKER_IMAGE_DEVELOPERTOOL="quay.io/wunder/wundertools-image-fuzzy-developershell"
 fi
 
 # Set some vars use by Docker-Compose. This may not be necessary for us.

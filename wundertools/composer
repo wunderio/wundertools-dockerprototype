@@ -9,17 +9,17 @@ CONTAINER_ARGS="${@:1}"
 docker run --rm -t -i \
     --net "${COMPOSE_NETWORK}" \
     --hostname=${PROJECT} \
-    --volume="${PATH_APP}/web:/app/web" \
-    --volume="${PATH_APP}/vendor:/app/vendor" \
+    --volumes-from="${PROJECT}_source_1" \
     --volume="${PATH_APP}/scripts:/app/scripts" \
     --volume="${PATH_APP}/composer.json:/app/composer.json" \
     --volume="${PATH_HOME}/.gitconfig:/app/.gitconfig" \
     --volume="${PATH_HOME}/.ssh:/app/.ssh" \
     --entrypoint=/usr/bin/composer \
-    -w=/app/project \
+    -w=/app \
     --name="${PROJECT}_composer" \
-    jamesnesbitt/wunder-developershell \
-    --working-dir=/app/project \
+    --user=app \
+    ${DOCKER_IMAGE_DEVELOPERTOOL} \
+    --working-dir=/app \
     ${CONTAINER_ARGS}
 
 #echo "
