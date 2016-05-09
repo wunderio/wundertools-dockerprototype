@@ -74,7 +74,7 @@ services:
   #
   db: 
     #image: quay.io/wunder/alpine-mariadb
-    image: jamesnesbitt/alpine-mariadb-app
+    image: quay.io/wunder/wundertools-image-fuzzy-mariadb
 
     ####
     # IMAGE BUILD OVERRIDES
@@ -110,7 +110,7 @@ services:
   #
   fpm:
     #image: quay.io/wunder/alpine-php-app
-    image: jamesnesbitt/alpine-php-app
+    image: quay.io/wunder/wundertools-image-fuzzy-php
     volumes_from:
       - source  # FPM gets source code from the source container (should be ReadOnly)
     links:
@@ -132,7 +132,7 @@ services:
   #
   www:
     #image: quay.io/wunder/alpine-nginx-pagespeed-app
-    image: jamesnesbitt/alpine-nginx-pagespeed-app
+    image: quay.io/wunder/wundertools-image-fuzzy-nginx
     environment:
       # If you are using DNSDOCK, this will assign a local DNS entry
       DNSDOCK_ALIAS: www.wunderdemo.docker
