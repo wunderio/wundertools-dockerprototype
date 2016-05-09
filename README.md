@@ -36,7 +36,7 @@ similar to vagrant:
 Typically you will need to run composer:
 
     $/> wundertools/composer update
-    $/> wundertools/composer upgrade
+    $/> wundertools/composer install
 
 Then you should be up and running.  See "access my site"
 
@@ -58,13 +58,7 @@ Get more information by looking in the wundertools/docs
 
 ### Accessing my containers
 
-@TODO
-
-### DNS
-
-*** DNS is an open topic that we have not resolved. Consider just using hostfile entries for now.
-
-#### /etc/hosts
+#### Container IP
 
 You can usually rely on a direct route to your container.  To find the IP for any container:
 
@@ -72,4 +66,13 @@ You can usually rely on a direct route to your container.  To find the IP for an
 
 *** Note that on some docker setups, the host has not routed container traffic 
 to the docker subnet (bad host) and so a manual route may be necessary.  The OSX Beta client seems to have this issue, but no route seems avaialable.
+
+#### Container shell
+
+You can get a fast shell inside any of the actual containers using: 
+
+    $/> wundertools/tools/execshell fpm
+
+*** Note that this shell is not as usefull as the featured shell from "wundertools/shell" as most of the service images do not even have bash installed.
+
 
