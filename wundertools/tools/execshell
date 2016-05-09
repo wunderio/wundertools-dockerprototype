@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../config.inc"
+
+# Which node to shell into
+NODE="${1}"
+if [ -z "${NODE}" ]; then
+	echo "[- There was no node specified, did you want to check for 'containerIP www'? -]"
+	exit 1
+fi
+
+# What command to run
+SHELL="${2:-/bin/sh}"
+
+# echo ">>>>>DOCKER:>EXECSHELL START [NODE:$NODE]
+# "
+
+docker exec -t -i "${PROJECT}_${NODE}_1" "${SHELL}"
+
+# echo "
+# <<<<<DOCKER:SHELL END "
