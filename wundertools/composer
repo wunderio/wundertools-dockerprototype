@@ -14,7 +14,7 @@ docker run --rm -t -i \
     --volume="${PATH_APP}/composer.json:/app/composer.json" \
     --volume="${PATH_HOME}/.gitconfig:/app/.gitconfig" \
     --volume="${PATH_HOME}/.ssh:/app/.ssh" \
-    --entrypoint=/usr/bin/composer \
+    --entrypoint=composer \
     -w=/app \
     --name="${PROJECT}_composer" \
     --user=app \
