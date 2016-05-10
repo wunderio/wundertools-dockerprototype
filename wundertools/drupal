@@ -34,6 +34,7 @@ docker run --rm -t -i \
     --entrypoint=/app/vendor/bin/drupal \
     --user=app \
     ${DOCKER_IMAGE_DEVELOPERTOOL} \
+    --ansi
     ${CONTAINER_ARGS}
 
 #echo "
