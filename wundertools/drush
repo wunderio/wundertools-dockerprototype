@@ -20,9 +20,10 @@ docker run --rm -t -i \
     --volume="${PATH_HOME}/.ssh:/app/.ssh" \
     -w=/app/web \
     --name="${PROJECT}_drush" \
-    --entrypoint=/app/vendor/bin/drush \
     --user=app \
+    --entrypoint="php" \
     ${DOCKER_IMAGE_DEVELOPERTOOL} \
+    /app/vendor/drush/drush/drush \
     ${CONTAINER_ARGS}
 
 # echo "
