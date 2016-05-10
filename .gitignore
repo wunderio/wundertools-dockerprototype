@@ -6,9 +6,11 @@
 #######################
 # IGNORING DRUPAL STUFF
 app/composer.lock
+app/drush/cache/*
 app/vendor
 app/web/core
 app/web/modules/contrib
 app/web/themes/contrib
 app/web/profiles/contrib
-
+app/web/sites/default/files/*
+app/web/sites/default/settings.php
