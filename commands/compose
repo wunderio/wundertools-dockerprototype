@@ -6,6 +6,4 @@
 # configurations files.
 #
 
-source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/config.inc"
-
 docker-compose --file "${COMPOSE_FILE}" --project-name "${COMPOSE_PROJECT_NAME}" $@

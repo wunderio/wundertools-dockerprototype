@@ -10,14 +10,12 @@
 # This script first checks to see if you have run composer update
 #
 
-source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/config.inc"
-
 if [ ! -f "${PATH_APP}/vendor/bin/drupal" ]; then
   echo "WARNING: there is no drupal console in this project, which probably mean that you have not run composer in your project."
   exit 1
 fi
 
-CONTAINER_ARGS="${@:1}"
+CONTAINER_ARGS="$@"
 #echo ">>>>>DOCKER:DRUPAL-CONSOLE START [ARG#:$#][CMD: ${CONTAINER_ARGS}]---[$*]:[$0][$1][$2][$3]
 #"
 

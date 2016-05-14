@@ -57,8 +57,13 @@ services:
     volumes:
       # Here we overlay local source on top of where the built source code 
       # would be in a production ready source image.
-      - ../app/web:/app/web 
-      - ../app/vendor:/app/vendor
+      #
+      # @NOTE we use an env variable to point to a sub-path, but this is not
+      # recommended, as it creates a dependency on the host environment.  
+      # consider creating a more formal layout instead.
+      #
+      - ${PATH_APP}/web:/app/web 
+      - ${PATH_APP}/vendor:/app/vendor
 
   ####
   # DB node 

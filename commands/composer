@@ -1,15 +1,27 @@
 #!/usr/bin/env bash
 
-source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/config.inc"
+####
+# Run PHP Composer in a devshell image
+#
+# @NOTE unlike other commands, this command does not just 
+#   mount volumes from source, which allows this container
+#   to run without having docker-compose run.
+#
 
-CONTAINER_ARGS="${@:1}"
+# make sure that we have vendor path, or docker will create
+# it, but it would be owned by the root user.
+if [ ! -d "${PATH_APP}/vendor" ]; then
+    mkdir "${PATH_APP}/vendor"
+fi
+
+CONTAINER_ARGS="$@"
 #echo ">>>>>DOCKER:COMPOSER START [CMD: ${CONTAINER_ARGS}]
 #"
 
-docker run --rm -t -i \
-    --net "${COMPOSE_NETWORK}" \
+docker run --rm -t -i \=
     --hostname=${PROJECT} \
-    --volumes-from="${PROJECT}_source_1" \
+    --volume="${PATH_APP}/web:/app/web" \
+    --volume="${PATH_APP}/vendor:/app/vendor" \
     --volume="${PATH_APP}/scripts:/app/scripts" \
     --volume="${PATH_APP}/composer.json:/app/composer.json" \
     --volume="${PATH_HOME}/.gitconfig:/app/.gitconfig" \

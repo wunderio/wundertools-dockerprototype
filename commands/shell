@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/config.inc"
-
-CONTAINER_ARGS="${@:1}"
+CONTAINER_ARGS="$@"
 # echo ">>>>>DOCKER:SHELL START [ARG#:$#][CMD: ${CONTAINER_ARGS}]---[$*]:[$0][$1][$2][$3]
 # "
 

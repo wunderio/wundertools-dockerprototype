@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 
-source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/config.inc"
-
 if [ ! -f "${PATH_APP}/vendor/bin/drush" ]; then
   echo "WARNING: there is no drush in this project, which probably mean that you have not run composer in your project."
   exit 1
 fi
 
-CONTAINER_ARGS="${@:1}"
+CONTAINER_ARGS="$@"
 # echo ">>>>>DOCKER:DRUSH START [CMD: ${CONTAINER_ARGS}]
 # "
 

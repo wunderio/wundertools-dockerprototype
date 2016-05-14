@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+TOOL="$1"
+shift
+
+source "${PATH_WUNDERTOOLS}/tools/${TOOL}" $@

@@ -5,53 +5,50 @@
 # This is a centralized executable for wundertools. it is meant to allow
 # running wundertools commands from anywhere inside your project.
 #
-# To use it, copy of symlimk it to any PATH location, such as ~/bin/wundertools
+# To use it: move, copy or symlimk it to any PATH location, such as ~/bin/wundertools
 # and make sure that it is executable.
 #
 
 # subpath that marks a wundertools project
 # @NOTE if this is empty it breaks stuff
-SUBPATH_WUNDERTOOLS="/wundertools"
+SUBPATH_WUNDERTOOLS="wundertools"
 
 # path executed from
 PATH_EXECUTION="${PATH_EXECUTION:-`pwd`}"
 # path to user home folder (in case)
 PATH_HOME="${PATH_HOME:-${HOME}}"
+# eventually, the path that containers a wundertools folder.
+PATH_CONTAINER="${PATH_EXECUTION}"
 
 # Determine project root, and data paths
-PATH_PROJECT="${PATH_EXECUTION}"
-while [ -n "${PATH_PROJECT}" ]; do
-  if [ "${PATH_PROJECT}" == "${PATH_HOME}" ]; then
-    echo "Could not find any wundertools project."
+while [ -n "${PATH_CONTAINER}" ]; do
+  if [ "${PATH_CONTAINER}" == "${PATH_HOME}" ]; then
+    echo "Could not find any wundertools project.  I looked for a '$SUBPATH_WUNDERTOOLS' folder, all the way to you user home folder, but couldn't find one."
     exit 1;
   fi
-  if [ "${PATH_PROJECT}" == "/" ]; then
+  if [ "${PATH_CONTAINER}" == "/" ]; then
+    echo "Could not find any wundertools project.  I looked for a '$SUBPATH_WUNDERTOOLS' folder, all the way to you machine root folder, but couldn't find one."
+    exit 1;
+  fi
+  if [ "${PATH_CONTAINER}" == "" ]; then # #TODO I can't rememeber how to do ors in bash if statements  :|
+    echo "Could not find any wundertools project.  I looked for a '$SUBPATH_WUNDERTOOLS' folder, all the way to you machine root folder, but couldn't find one."
+    exit 1;
+  fi
 
-    echo "Could not find any wundertools project."
-    exit 1;
-  fi
-  if [ "${PATH_PROJECT}" == "" ]; then
 
-    echo "Could not find any wundertools project."
-    exit 1;
-  fi
-  if [ -d "${PATH_PROJECT}${SUBPATH_WUNDERTOOLS}" ]; then
-    PATH_WUNDERTOOLS="${PATH_PROJECT}${SUBPATH_WUNDERTOOLS}"
+  if [ -d "${PATH_CONTAINER}/${SUBPATH_WUNDERTOOLS}" ]; then
+    PATH_WUNDERTOOLS="${PATH_CONTAINER}/${SUBPATH_WUNDERTOOLS}"
     break
   fi
 
-  PATH_PROJECT="$(dirname "${PATH_PROJECT}")"
+  PATH_CONTAINER="$(dirname "${PATH_CONTAINER}")"
 done
 
-COMMAND="$1"
-shift
-ARGS="$@"
-
-#echo "WUNDERTOOLS RUN [PROJECT:${PATH_PROJECT}][WUNDERTOOLS:${PATH_WUNDERTOOLS}][COMMAND:${COMMAND}][ARGS: ${ARGS}"
-
-if [ ! -x "${PATH_WUNDERTOOLS}/${COMMAND}" ]; then
-  echo "No matching command found: ${COMMAND}"
+#echo "WUNDERTOOLS RUN [PROJECT:${PATH_CONTAINER}][WUNDERTOOLS:${PATH_WUNDERTOOLS}][ARGS: ${@}"
+if [ ! -x "${PATH_WUNDERTOOLS}/boostrap.inc" ]; then
+  echo "No boostrap found in wundertools root: ${PATH_WUNDERTOOLS}"
   exit 1
 fi
 
-source "${PATH_WUNDERTOOLS}/${COMMAND}" ${ARGS}
+# Hand off to the bootstrap utility.
+source "${PATH_WUNDERTOOLS}/boostrap.inc" $@
