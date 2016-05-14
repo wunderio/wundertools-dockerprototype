@@ -23,22 +23,22 @@ settings.  This also allows us to get the docker-compose.yml out of the project 
 
 ```
 # start all of the needed containers 
-$/> wundertools/composer up -d
+$/> wundertools/compose up -d
 # start all of the needed containers but keep attached to them for debugging 
-$/> wundertools/composer up
+$/> wundertools/compose up
 # stop all container
-$/> wundertools/composer down
+$/> wundertools/compose down
 # stop all containers and remove them
-$/> wundertools/composer down -v
+$/> wundertools/compose down -v
 
 # find out more
-$/> wundertools/composer --help
+$/> wundertools/compose --help
 ```
 
 ## composer : wraps PHP composer into a command container
 
 This command container acts as through it were running composer from the project
-root.  Pass compose command and flags directly to the command
+root.  Pass composer command and flags directly to the command
 
 ### example
 
