@@ -77,7 +77,7 @@ if [ -z "${PATH_APP}" ]; then
       SUBPATH_APP="../"
   fi
 
-    PATH_APP="$( cd "$( dirname "${PATH_WUNDERTOOLS}" )" && cd "${SUBPATH_APP}" && pwd )/${SUBPATH_APP}"
+    PATH_APP="$( cd "${PATH_WUNDERTOOLS}" && cd "${SUBPATH_APP}" && pwd )"
 fi
 
 if [ ! -f ~/.gitconfig ]; then
@@ -147,6 +147,8 @@ if [ ! -f "${PATH_COMMAND}" ]; then
 else 
   shift
 fi
+
+echo "CONFIGURED [PATH_WUNDERTOOLS:${PATH_WUNDERTOOLS}][PATH_APP:${PATH_APP}][PATH_COMMAND:${PATH_COMMAND}][ARGS:$@]"
 
 # Run the command
 source "${PATH_COMMAND}" $@

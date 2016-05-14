@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/config.inc"
-
 echo " (In the future I will ask you questions to configure your site)"
 
 # @TODO
