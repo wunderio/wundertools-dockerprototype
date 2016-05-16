@@ -92,7 +92,8 @@ scripts are to be run directly.  The scripts assume that the layout is respected
 Each of the commands should be run directly, from the project root and should try to pull in the 
 configuration from config.inc automatically.
 
-If you get sick of running relative path commands, consider copying ./wundertools/wundertools to any user bin path, to allow you to run "$/> wundertools {command}" instead of "$/> ./wundertools {command}"
+If you get sick of running relative path commands, consider copying ./wundertools/wundertools to any user bin path, to allow you to run the command
+from any path, without worrying about your path to the script.
 
 Get more information by looking in the wundertools/docs
 
