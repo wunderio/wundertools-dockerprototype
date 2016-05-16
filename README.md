@@ -92,7 +92,7 @@ scripts are to be run directly.  The scripts assume that the layout is respected
 Each of the commands should be run directly, from the project root and should try to pull in the 
 configuration from config.inc automatically.
 
-If you get sick of running relative path commands, consider copying ./wundertools/wundertools to any user bin path, to allow you to run "$/> wundertools {command}" instead of "$/> ./wundertools/{command}"
+If you get sick of running relative path commands, consider copying ./wundertools/wundertools to any user bin path, to allow you to run "$/> wundertools {command}" instead of "$/> ./wundertools {command}"
 
 Get more information by looking in the wundertools/docs
 
@@ -102,7 +102,7 @@ Get more information by looking in the wundertools/docs
 
 You can usually rely on a direct route to your container.  To find the IP for any container:
 
-    $/> wundertools/tools/containerIP www
+    $/> wundertools tools containerIP www
 
 *** Note that on some docker setups, the host has not routed container traffic 
 to the docker subnet (bad host) and so a manual route may be necessary.  The OSX Beta client seems to have this issue, but no route seems avaialable.
@@ -111,7 +111,7 @@ to the docker subnet (bad host) and so a manual route may be necessary.  The OSX
 
 You can get a fast shell inside any of the actual containers using: 
 
-    $/> wundertools/tools/execshell fpm
+    $/> wundertools tools execshell fpm
 
-*** Note that this shell is not as usefull as the featured shell from "wundertools/shell" as most of the service images do not even have bash installed.
+*** Note that this shell is not as usefull as the featured shell from "wundertools shell" as most of the service images do not even have bash installed.
 
