@@ -45,10 +45,10 @@ while [ -n "${PATH_CONTAINER}" ]; do
 done
 
 #echo "WUNDERTOOLS RUN [PROJECT:${PATH_CONTAINER}][WUNDERTOOLS:${PATH_WUNDERTOOLS}][ARGS: ${@}"
-if [ ! -x "${PATH_WUNDERTOOLS}/boostrap.inc" ]; then
-  echo "No boostrap found in wundertools root: ${PATH_WUNDERTOOLS}"
+if [ ! -f "${PATH_WUNDERTOOLS}/bootstrap.inc" ]; then
+  echo "No boostrap found in wundertools root. Expected ${PATH_WUNDERTOOLS}/bootstrap.inc"
   exit 1
 fi
 
 # Hand off to the bootstrap utility.
-source "${PATH_WUNDERTOOLS}/boostrap.inc" $@
+source "${PATH_WUNDERTOOLS}/bootstrap.inc" $@
