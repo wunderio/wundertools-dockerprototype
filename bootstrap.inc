@@ -74,10 +74,14 @@ fi
 
 if [ -z "${PATH_APP}" ]; then
   if [ -z "${SUBPATH_APP}" ]; then
+    if [ -d "${PATH_WUNDERTOOLS}/app" ]; then 
+      SUBPATH_APP="app"
+    else
       SUBPATH_APP="../"
+    fi
   fi
 
-    PATH_APP="$( cd "${PATH_WUNDERTOOLS}" && cd "${SUBPATH_APP}" && pwd )"
+  PATH_APP="$( cd "${PATH_WUNDERTOOLS}" && cd "${SUBPATH_APP}" && pwd )"
 fi
 
 if [ ! -f ~/.gitconfig ]; then
