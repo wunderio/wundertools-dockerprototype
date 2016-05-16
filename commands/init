@@ -1,4 +1,16 @@
 #!/usr/bin/env bash
+###
+# Convert this wundertools installation into a demo
+#
+# This script exists because the original version of the prototype tools
+# were a complete application, but the new redesign is layed out so that
+# it can be installed into an existing application.  If you want the old
+# behaviour, run this command.
+#
+# This command does the following:
+#   - uses composer to create a drupal 8 app from composer at /app
+#   - puts a custom settings file into /app with only 1 or two settings
+#
 
 echo "Creating new demo Drupal 8 project in ./app folder"
 
@@ -22,6 +34,15 @@ echo "#!/usr/bin/env bash
 ######################
 # DEMO CONFIGURATION
 #
+
+###
+# PROJECT name
+#
+# This is used as a base for container and network names.  Note that this
+# must be unique across all of your wundertools implementations, or docker
+# compose will get confused.
+#
+PROJECT=\"wunderdemo\"
 
 ###
 # Some important paths used in the app.  These are autodetermined by

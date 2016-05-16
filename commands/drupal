@@ -7,12 +7,16 @@
 # php-cli installed, and linked to the db container.  This container then passes any arguments directly to
 # the console command.
 #
-# This script first checks to see if you have run composer update
+#     $/> wundertools drupal module:install devel
 #
 
 if [ ! -f "${PATH_APP}/vendor/bin/drupal" ]; then
   echo "WARNING: there is no drupal console in this project, which probably mean that you have not run composer in your project."
   exit 1
+fi
+if [ ! -d "${PATH_APP}/console" ]; then
+  echo "Project console configuration path was missing. creating it now"
+  mkdir -p "${PATH_APP}/console"
 fi
 
 CONTAINER_ARGS="$@"

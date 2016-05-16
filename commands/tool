@@ -1,4 +1,16 @@
 #!/usr/bin/env bash
+####
+# A command that hands of to a script in the /tools folder
+#
+# this is a redundant left over from the previous layout of
+# separation of tools and commands.  Tools, which weren't 
+# functional enough to be considered commands were kept in
+# ./tools, which was directly accessible.  Tools now also
+# are written like commands but just need ot be routed through
+# this tool:
+#
+#     $/> wundertools tool containerIP www
+#
 
 TOOL="$1"
 shift

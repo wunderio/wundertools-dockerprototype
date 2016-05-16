@@ -1,5 +1,8 @@
 # Command scripts
 
+Wundertools commands are passed as the second argument in the wundertools command. All subsequent
+arguments are passed directly to the command script.  Command scripts can be found in
+./wundertools commands/
 
 ### The following command tools exist:
 
@@ -13,26 +16,29 @@
 * archive/restore : methods that could be used to backup, which would reuse things like drush
 * feature/branch : create running branched environments
 
-
 ## compose : docker-compose replacement
 
 Here we wrap docker compose so that we can hard code the project name, and perhaps the project network
 settings.  This also allows us to get the docker-compose.yml out of the project root folder.
 
+Note that compose is now the default command, and so it can be reached directly, ommiting the 
+"compose" argument.  This can of course lead to strange errors when compose received arguments
+or commands from a mispelt command or such error.
+
 ### example
 
 ```
 # start all of the needed containers 
-$/> wundertools/compose up -d
+$/> wundertools compose up -d
 # start all of the needed containers but keep attached to them for debugging 
-$/> wundertools/compose up
+$/> wundertools compose up
 # stop all container
-$/> wundertools/compose down
+$/> wundertools compose down
 # stop all containers and remove them
-$/> wundertools/compose down -v
+$/> wundertools compose down -v
 
 # find out more
-$/> wundertools/compose --help
+$/> wundertools compose --help
 ```
 
 ## composer : wraps PHP composer into a command container
@@ -43,8 +49,8 @@ root.  Pass composer command and flags directly to the command
 ### example
 
 ````
-$/> wundertools/composer update
-$/> wundertools/composer install
+$/> wundertools composer update
+$/> wundertools composer install
 ````
 
 ## drush : wraps drush into a command container
@@ -57,8 +63,8 @@ pass drush flags directly to the script
 ### example
 
 ````
-$/> wundertools/drush cc all
-$/> wundertools/drush sql-cli
+$/> wundertools drush cc all
+$/> wundertools drush sql-cli
 ````
 
 ## drupal : wraps drupal console into a command container
@@ -70,9 +76,9 @@ This script wraps around the drupal-console.
 ### example
 
 ````
-$/> wundertools/drupal config:import
-$/> wundertools/drupal cache:rebuild all
-$/> wundertools/drupal generate:module
+$/> wundertools drupal config:import
+$/> wundertools drupal cache:rebuild all
+$/> wundertools drupal generate:module
 ````
 
 ## shell : gives a usefull ZSH shell with access to toolS and other containers
@@ -90,7 +96,7 @@ production workflow.
 
 ````
 # open a zsh shell:
-$/> wundertools/shell
+$/> wundertools shell
 # run a direct command
-$/> wundertools/shell ls -la
+$/> wundertools shell ls -la
 ````

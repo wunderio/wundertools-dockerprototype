@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 ####
 # Run PHP Composer in a devshell image
 #
@@ -7,10 +6,13 @@
 #   mount volumes from source, which allows this container
 #   to run without having docker-compose run.
 #
+#     $/> wundertools composer update
+#
 
 # make sure that we have vendor path, or docker will create
 # it, but it would be owned by the root user.
 if [ ! -d "${PATH_APP}/vendor" ]; then
+    echo "Project composer vendor path does not exist. Creating it now at ${PATH_APP}/vendor"
     mkdir "${PATH_APP}/vendor"
 fi
 

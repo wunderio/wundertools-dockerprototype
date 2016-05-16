@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+####
+# Shell
+#
+# Gives a user zsh shell, with all volumes mpp in, and all 
+# containers linked, for typical ssh like behaviour.
+#
 
 CONTAINER_ARGS="$@"
 # echo ">>>>>DOCKER:SHELL START [ARG#:$#][CMD: ${CONTAINER_ARGS}]---[$*]:[$0][$1][$2][$3]
