@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
+####
+# Shell
+#
+# Gives a user zsh shell, with all volumes mpp in, and all 
+# containers linked, for typical ssh like behaviour.
+#
 
-source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/config.inc"
-
-CONTAINER_ARGS="${@:1}"
+CONTAINER_ARGS="$@"
 # echo ">>>>>DOCKER:SHELL START [ARG#:$#][CMD: ${CONTAINER_ARGS}]---[$*]:[$0][$1][$2][$3]
 # "
 
@@ -13,10 +17,11 @@ docker run --rm -t -i \
     --link="${PROJECT}_fpm_1:fpm.app" \
     --link="${PROJECT}_www_1:www.app" \
     --volumes-from="${PROJECT}_source_1" \
-    --volume="${PATH_APP}/scripts:/app/scripts" \
-    --volume="${PATH_APP}/composer.json:/app/composer.json" \
-    --volume="${PATH_APP}/console:/app/.console" \
-    --volume="${PATH_APP}/drush:/app/.drush" \
+    --volume="${PATH_APP}:/app/project" \
+    --volume="${PATH_SOURCE}:/app/source" \
+    --volume="${PATH_SOURCE}/console:/app/.console" \
+    --volume="${PATH_SOURCE}/drush:/app/.drush" \
+    --volume="${PATH_HOME}/.gitconfig:/app/.gitconfig" \
     --volume="${PATH_HOME}/.ssh:/app/.ssh" \
     -w=/app \
     --name="${PROJECT}_shell" \

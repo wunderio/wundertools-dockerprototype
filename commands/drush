@@ -1,13 +1,21 @@
 #!/usr/bin/env bash
+###
+# DRUSH
+#
+# Run drush in a container, connected to source volumes and 
+# linked to other containers.
+# This lets you run drush as though it was installed on the 
+# host, but without installing php or anything on the host
+#
+#     $/> wundertools drush cc all
+#
 
-source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/config.inc"
-
-if [ ! -f "${PATH_APP}/vendor/bin/drush" ]; then
+if [ ! -f "${PATH_SOURCE}/vendor/bin/drush" ]; then
   echo "WARNING: there is no drush in this project, which probably mean that you have not run composer in your project."
   exit 1
 fi
 
-CONTAINER_ARGS="${@:1}"
+CONTAINER_ARGS="$@"
 # echo ">>>>>DOCKER:DRUSH START [CMD: ${CONTAINER_ARGS}]
 # "
 
@@ -16,7 +24,7 @@ docker run --rm -t -i \
     --hostname=${PROJECT} \
     --link="${PROJECT}_db_1:db.app" \
     --volumes-from="${PROJECT}_source_1" \
-    --volume="${PATH_APP}/drush:/app/.drush" \
+    --volume="${PATH_SOURCE}/drush:/app/.drush" \
     --volume="${PATH_HOME}/.ssh:/app/.ssh" \
     -w=/app/web \
     --name="${PROJECT}_drush" \

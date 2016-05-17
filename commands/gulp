@@ -17,12 +17,10 @@
 # mapped in the container.
 #
 
-source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/config.inc"
-
 # use the run path for execution
 PATH_GULP="${PATH_EXECUTION}"
 
-CONTAINER_ARGS="${@:1}"
+CONTAINER_ARGS="$@"
 # echo ">>>>>DOCKER:GULP START [CMD: ${CONTAINER_ARGS}]
 # "
 
