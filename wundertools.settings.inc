@@ -38,6 +38,11 @@
 # Instead of PATH_APP, you could set the relative path from PATH_WUNDERTOOLS to PATH_APP
 #SUBPATH_APP=""
 
+# Set the path to the root source code for your app
+#PATH_SOURCE=""
+# Or alternatively, set the sub path from PATH_APP to your source Root
+#SUBPATH_SOURCE=""
+
 ###
 # Docker compose config
 #

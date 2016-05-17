@@ -10,17 +10,17 @@
 #     $/> wundertools drupal module:install devel
 #
 
-if [ ! -f "${PATH_APP}/vendor/bin/drupal" ]; then
+if [ ! -f "${PATH_SOURCE}/vendor/bin/drupal" ]; then
   echo "WARNING: there is no drupal console in this project, which probably mean that you have not run composer in your project."
   exit 1
 fi
-if [ ! -d "${PATH_APP}/console" ]; then
+if [ ! -d "${PATH_SOURCE}/console" ]; then
   echo "Project console configuration path was missing. creating it now"
-  mkdir -p "${PATH_APP}/console"
+  mkdir -p "${PATH_SOURCE}/console"
 fi
 
 CONTAINER_ARGS="$@"
-#echo ">>>>>DOCKER:DRUPAL-CONSOLE START [ARG#:$#][CMD: ${CONTAINER_ARGS}]---[$*]:[$0][$1][$2][$3]
+#echo ">>>>>DOCKER:DRUPAL-CONSOLE START [CMD: ${CONTAINER_ARGS}]
 #"
 
 docker run --rm -t -i \
@@ -28,15 +28,15 @@ docker run --rm -t -i \
     --hostname=${PROJECT} \
     --link="${PROJECT}_db_1:db.app" \
     --volumes-from="${PROJECT}_source_1" \
-    --volume="${PATH_APP}/console:/app/.console" \
-    --volume="${PATH_APP}/drush:/app/.drush" \
+    --volume="${PATH_SOURCE}/console:/app/.console" \
+    --volume="${PATH_SOURCE}/drush:/app/.drush" \
     --volume="${PATH_HOME}/.ssh:/app/.ssh" \
     -w=/app/web \
     --name="${PROJECT}_drupal" \
     --entrypoint=/app/vendor/bin/drupal \
     --user=app \
     ${DOCKER_IMAGE_DEVELOPERTOOL} \
-    --ansi
+    --ansi \
     ${CONTAINER_ARGS}
 
 #echo "

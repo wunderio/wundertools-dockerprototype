@@ -13,20 +13,28 @@
 # Make all variables shell/env variables (mainly so that docker-compose can see them)
 set -a
 
-###
-# PATH_WUNDERTOOLS : the path to the wundertools configuration and utilities
-#
-# (this is the only pre-bootstrap step, just used so that we can start)
-#
-if [ -z "${PATH_WUNDERTOOLS}" ]; then
-    PATH_WUNDERTOOLS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-fi
-
 ###########################################
 # STAGE 1 : Include the manual settings inc
 #
 # Put any settings overrides there
 #
+
+###
+# PATHS : Paths are set during configuration, as they are needed
+#   often to find settings files
+#
+
+# some commands might want to be able to refer to the active path?
+if [ -z "${PATH_EXECUTION}" ]; then
+    PATH_EXECUTION="$(pwd)"
+fi
+
+###
+# PATH_WUNDERTOOLS : the path to the wundertools configuration and utilities
+#
+if [ -z "${PATH_WUNDERTOOLS}" ]; then
+    PATH_WUNDERTOOLS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+fi
 
 
 WUNDERTOOLS_SETTINGS_FILENAME="wundertools.settings.inc"
@@ -34,10 +42,42 @@ WUNDERTOOLS_SETTINGS_FILENAME="wundertools.settings.inc"
 if [ -f "$PATH_WUNDERTOOLS/${WUNDERTOOLS_SETTINGS_FILENAME}" ]; then
   source "$PATH_WUNDERTOOLS/${WUNDERTOOLS_SETTINGS_FILENAME}"
 fi
+
+# App project root
+#
+# PATH_APP : the path to the application root
+# SUBPATH_APP : if no PATH_APP is set, this will be used to find PATH_APP from PATH_WUNDERTOOLS
+
+if [ -z "${PATH_APP}" ]; then
+  if [ -z "${SUBPATH_APP}" ]; then
+    if [ -d "${PATH_WUNDERTOOLS}/app" ]; then
+      SUBPATH_APP="app"
+    else
+      SUBPATH_APP="../"
+    fi
+  fi
+
+  PATH_APP="$( cd "${PATH_WUNDERTOOLS}" && cd "${SUBPATH_APP}" && pwd )"
+fi
+
 # check if there is a config in the app folder
 if [ -f "$PATH_APP/${WUNDERTOOLS_SETTINGS_FILENAME}" ]; then
   source "$PATH_APP/${WUNDERTOOLS_SETTINGS_FILENAME}"
 fi
+
+# App source root
+#
+# PATH_SOURCE : the path to the application root
+# SUBPATH_SOURCE : if no PATH_APP is set, this will be used to find PATH_SOURCE FROM PATH_APP
+
+if [ -z "${PATH_SOURCE}" ]; then
+  if [ -z "${SUBPATH_SOURCE}" ]; then
+    PATH_SOURCE="${PATH_APP}"
+  else 
+    PATH_SOURCE="$( cd "${PATH_APP}" && cd "${SUBPATH_SOURCE}" && pwd )"
+  fi
+fi
+
 
 ###
 # THINGS THAT AREN'T ALWAYS WORKING YET
@@ -58,31 +98,6 @@ fi
 # already manually defined above.
 #
 
-###
-# PATHS
-#
-
-# some commands might want to be able to refer to the active path?
-if [ -z "${PATH_EXECUTION}" ]; then
-    PATH_EXECUTION="$(pwd)"
-fi
-
-# App project root
-#
-# PATH_APP : the path to the application root
-# SUBPATH_APP : if no PATH_APP is set, this will be used to find PATH_APP from PATH_WUNDERTOOLS
-
-if [ -z "${PATH_APP}" ]; then
-  if [ -z "${SUBPATH_APP}" ]; then
-    if [ -d "${PATH_WUNDERTOOLS}/app" ]; then 
-      SUBPATH_APP="app"
-    else
-      SUBPATH_APP="../"
-    fi
-  fi
-
-  PATH_APP="$( cd "${PATH_WUNDERTOOLS}" && cd "${SUBPATH_APP}" && pwd )"
-fi
 
 if [ ! -f ~/.gitconfig ]; then
   echo ">> creating host user ~/.gitconfig, in which composer may store a github token, if you provide it.We will use a host file for this, so that the github token is persistant, and doesn't need to be re-entered."

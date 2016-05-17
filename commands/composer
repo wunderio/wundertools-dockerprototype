@@ -9,32 +9,52 @@
 #     $/> wundertools composer update
 #
 
-# make sure that we have vendor path, or docker will create
-# it, but it would be owned by the root user.
-if [ ! -d "${PATH_APP}/vendor" ]; then
-    echo "Project composer vendor path does not exist. Creating it now at ${PATH_APP}/vendor"
-    mkdir "${PATH_APP}/vendor"
+
+# COMPOSER_RUN_IN_PWD
+#
+# if == "YES" then composer is meant to be run as
+# a direct pass-through, as though running it in the current
+# path.  Otherwise it is meant to be run in the PATH_APP
+#
+COMPOSER_RUN_IN_PWD="${COMPOSER_RUN_IN_PWD:-NO}"
+
+while [ $# -gt 0 ]
+do
+  case "$1" in
+  --pwd)
+    COMPOSER_RUN_IN_PWD="YES"
+    ;;
+  *)
+    break;
+  esac
+  shift
+done
+
+# Isolate arguments to pass to docker
+CONTAINER_ARGS="$@"
+
+
+if [ "${COMPOSER_RUN_IN_PWD}" == "YES" ]; then
+    PATH_COMPOSER="${PATH_EXECUTION}"
+else
+    PATH_COMPOSER="${PATH_APP}"
 fi
 
-CONTAINER_ARGS="$@"
 #echo ">>>>>DOCKER:COMPOSER START [CMD: ${CONTAINER_ARGS}]
 #"
 
-docker run --rm -t -i \=
+docker run --rm -t -i \
     --hostname=${PROJECT} \
-    --volume="${PATH_APP}/web:/app/web" \
-    --volume="${PATH_APP}/vendor:/app/vendor" \
-    --volume="${PATH_APP}/scripts:/app/scripts" \
-    --volume="${PATH_APP}/composer.json:/app/composer.json" \
+    --volume="${PATH_COMPOSER}:/app/source" \
     --volume="${PATH_HOME}/.gitconfig:/app/.gitconfig" \
     --volume="${PATH_HOME}/.ssh:/app/.ssh" \
     --entrypoint=composer \
-    -w=/app \
+    -w=/app/source \
     --name="${PROJECT}_composer" \
     --user=app \
     -e COMPOSER_PROCESS_TIMEOUT=600 \
     ${DOCKER_IMAGE_DEVELOPERTOOL} \
-    --working-dir=/app \
+    --working-dir=/app/source \
     ${CONTAINER_ARGS}
 
 #echo "

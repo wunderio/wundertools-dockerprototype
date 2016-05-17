@@ -12,18 +12,28 @@ echo "CURRENT CONFIGURATION:"
 echo "-- GENERAL"
 echo "--> PROJECT NAME ------: ${PROJECT}"
 echo "-- PATHS"
-echo "--> APP----------------: ${PATH_APP}"
+echo "--> EXECUTION ---------: ${PATH_EXECUTION}"
 echo "--> WUNDERTOOLS -------: ${PATH_WUNDERTOOLS}"
+echo "--> APP ---------------: ${PATH_APP}"
+echo "--> SOURCE ------------: ${PATH_SOURCE}"
+echo "-- SETTINGS"
+
+FOUND="NOT FOUND"; [ -f "$PATH_WUNDERTOOLS/${WUNDERTOOLS_SETTINGS_FILENAME}" ] && FOUND="FOUND"
+echo "--> DEFAULT -----------: ${FOUND} $PATH_WUNDERTOOLS/${WUNDERTOOLS_SETTINGS_FILENAME}"
+FOUND="NOT FOUND"; [ -f "$PATH_APP/${WUNDERTOOLS_SETTINGS_FILENAME}" ] && FOUND="FOUND"
+echo "--> APP ---------------: ${FOUND} $PATH_APP/${WUNDERTOOLS_SETTINGS_FILENAME}"
+
 echo "-- DOCKER-COMPOSE"
+echo "--> COMPOSE_FILE-------: ${COMPOSE_FILE}"
 echo "--> COMPOSE_NETWORK----: ${COMPOSE_NETWORK}"
 
 echo "-- TESTS"
 
 if [ ! -f "${PATH_APP}/vendor/bin/drupal" ]; then
-  echo "--> drupal-console : NOT FOUND [${PATH_APP}/vendor/bin/drupal]"
+  echo "--> drupal-console ----: NOT FOUND [${PATH_APP}/vendor/bin/drupal]"
 fi
 if [ ! -f "${PATH_APP}/vendor/bin/drush" ]; then
-  echo "--> drush          : NOT FOUND [${PATH_APP}/vendor/bin/drush]"
+  echo "--> drush -------------: NOT FOUND [${PATH_APP}/vendor/bin/drush]"
 fi
 
 echo "DONE"
