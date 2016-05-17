@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+####
+# Run PHP Composer in a devshell image
+#
+# @NOTE unlike other commands, this command does not just 
+#   mount volumes from source, which allows this container
+#   to run without having docker-compose run.
+#
+#     $/> wundertools composer update
+#
+
+
+# COMPOSER_RUN_IN_PWD
+#
+# if == "YES" then composer is meant to be run as
+# a direct pass-through, as though running it in the current
+# path.  Otherwise it is meant to be run in the PATH_APP
+#
+COMPOSER_RUN_IN_PWD="${COMPOSER_RUN_IN_PWD:-NO}"
+
+while [ $# -gt 0 ]
+do
+  case "$1" in
+  --pwd)
+    COMPOSER_RUN_IN_PWD="YES"
+    ;;
+  *)
+    break;
+  esac
+  shift
+done
+
+# Isolate arguments to pass to docker
+CONTAINER_ARGS="$@"
+
+
+if [ "${COMPOSER_RUN_IN_PWD}" == "YES" ]; then
+    PATH_COMPOSER="${PATH_EXECUTION}"
+else
+    PATH_COMPOSER="${PATH_APP}"
+fi
+
+#echo ">>>>>DOCKER:COMPOSER START [CMD: ${CONTAINER_ARGS}]
+#"
+
+docker run --rm -t -i \
+    --hostname=${PROJECT} \
+    --volume="${PATH_COMPOSER}:/app/source" \
+    --volume="${PATH_HOME}/.gitconfig:/app/.gitconfig" \
+    --volume="${PATH_HOME}/.ssh:/app/.ssh" \
+    --entrypoint=composer \
+    -w=/app/source \
+    --name="${PROJECT}_composer" \
+    --user=app \
+    -e COMPOSER_PROCESS_TIMEOUT=600 \
+    ${DOCKER_IMAGE_DEVELOPERTOOL} \
+    --working-dir=/app/source \
+    ${CONTAINER_ARGS}
+
+#echo "
+#<<<<<DOCKER:COMPOSER END "
