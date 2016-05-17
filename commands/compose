@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# RUN docker-composer
+#
+# This is a wrapper around docker composer so that we can force a project name
+# as a base for all container names, and so that we can allow switching of yml
+# configurations files.
+#
+# @NOTE that this is now the default command, so in some cases it will receive
+#    bad arguments which may have been intened for a different container.
+#
+#    $/> wundertools up
+#    $/> wundertools compose restart www
+#
+# Compose yml file is looked for here (PATH_APP is usually ./app or ../)
+#   PATH_APP/compose.{PROJECT}.yml
+#   PATH_APP/compose.default.yml
+#   ./compose.{PROJECT}.yml
+#   ./compose.default.yml
+#
+
+docker-compose --file "${COMPOSE_FILE}" --project-name "${COMPOSE_PROJECT_NAME}" $@

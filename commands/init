@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+###
+# Convert this wundertools installation into a demo
+#
+# This script exists because the original version of the prototype tools
+# were a complete application, but the new redesign is layed out so that
+# it can be installed into an existing application.  If you want the old
+# behaviour, run this command.
+#
+# This command does the following:
+#   - uses composer to create a drupal 8 app from composer at /app
+#   - puts a custom settings file into /app with only 1 or two settings
+#
+
+echo "Creating new demo Drupal 8 project in ./app folder"
+
+docker run --rm -t -i \
+    --hostname=${PROJECT} \
+    --volume="${PATH_WUNDERTOOLS}:/app/project" \
+    --volume="${PATH_HOME}/.gitconfig:/app/.gitconfig" \
+    --volume="${PATH_HOME}/.ssh:/app/.ssh" \
+    --entrypoint=composer \
+    -w=/app/project \
+    --name="${PROJECT}_init" \
+    --user=app \
+    -e COMPOSER_PROCESS_TIMEOUT=600 \
+    ${DOCKER_IMAGE_DEVELOPERTOOL} \
+    --working-dir=/app/project \
+ 	create-project drupal-composer/drupal-project:8.x-dev app --stability dev --no-interaction
+
+echo "Overwriting the default settings.inc"
+echo "#!/usr/bin/env bash
+
+######################
+# DEMO CONFIGURATION
+#
+
+###
+# PROJECT name
+#
+# This is used as a base for container and network names.  Note that this
+# must be unique across all of your wundertools implementations, or docker
+# compose will get confused.
+#
+PROJECT=\"wunderdemo\"
+
+###
+# Some important paths used in the app.  These are autodetermined by
+# default to be ./app and ./wundertools from your root project, but
+# I guess that you could override them here.
+#
+
+# Instead of PATH_APP, you could set the relative path from PATH_WUNDERTOOLS to PATH_APP
+SUBPATH_APP=\"app\"  # THIS WAS ADDED BY THE INIT COMMAND
+
+" >> "${PATH_WUNDERTOOLS}/app/wundertools.settings.inc"
