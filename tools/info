@@ -11,12 +11,17 @@ echo " (In the future I will ask you questions to configure your site)"
 echo "CURRENT CONFIGURATION:"
 echo "-- GENERAL"
 echo "--> PROJECT NAME ------: ${PROJECT}"
-echo "-- PATHS"
+echo "-- PATHS (HOST)"
+echo "--> HOME --------------: ${PATH_HOME}"
 echo "--> EXECUTION ---------: ${PATH_EXECUTION}"
 echo "--> WUNDERTOOLS -------: ${PATH_WUNDERTOOLS}"
 echo "--> APP ---------------: ${PATH_APP}"
 echo "--> SOURCE ------------: ${PATH_SOURCE}"
-echo "-- SETTINGS"
+echo "-- PATHS (INSIDE CONTAINERS)"
+echo "--> HOME --------------: ${CONTAINER_PATH_HOME}"
+echo "--> APP ---------------: ${CONTAINER_PATH_APP}"
+echo "--> SOURCE ------------: ${CONTAINER_PATH_SOURCE}"
+echo "-- SETTINGS SOURCES (OPTIONAL)"
 
 FOUND="NOT FOUND"; [ -f "$PATH_WUNDERTOOLS/${WUNDERTOOLS_SETTINGS_FILENAME}" ] && FOUND="FOUND"
 echo "--> DEFAULT -----------: ${FOUND} $PATH_WUNDERTOOLS/${WUNDERTOOLS_SETTINGS_FILENAME}"
@@ -29,11 +34,19 @@ echo "--> COMPOSE_NETWORK----: ${COMPOSE_NETWORK}"
 
 echo "-- TESTS"
 
-if [ ! -f "${PATH_APP}/vendor/bin/drupal" ]; then
-  echo "--> drupal-console ----: NOT FOUND [${PATH_APP}/vendor/bin/drupal]"
+if [ ! -f "${PATH_HOME}/.gitconfig" ]; then
+  echo "--> ~/.gitconfig ------: NOT FOUND [${PATH_HOME}/.gitconfig] : user global git settings"
 fi
-if [ ! -f "${PATH_APP}/vendor/bin/drush" ]; then
-  echo "--> drush -------------: NOT FOUND [${PATH_APP}/vendor/bin/drush]"
+
+if [ ! -d "${PATH_SOURCE}/console" ]; then
+  echo "--> console conf ------: NOT FOUND [${PATH_SOURCE}/console] : drupal console settings for your project"
+fi
+
+if [ ! -f "${PATH_SOURCE}/vendor/bin/drupal" ]; then
+  echo "--> drupal-console ----: NOT FOUND [${PATH_SOURCE}/vendor/bin/drupal] : project specific drupal-console executable (from composer)"
+fi
+if [ ! -f "${PATH_SOURCE}/vendor/bin/drush" ]; then
+  echo "--> drush -------------: NOT FOUND [${PATH_SOURCE}/vendor/bin/drush] : project specific drush executable (from composer)"
 fi
 
 echo "DONE"

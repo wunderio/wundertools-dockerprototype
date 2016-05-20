@@ -16,16 +16,15 @@ echo "Creating new demo Drupal 8 project in ./app folder"
 
 docker run --rm -t -i \
     --hostname=${PROJECT} \
-    --volume="${PATH_WUNDERTOOLS}:/app/project" \
-    --volume="${PATH_HOME}/.gitconfig:/app/.gitconfig" \
-    --volume="${PATH_HOME}/.ssh:/app/.ssh" \
+    --volume="${PATH_WUNDERTOOLS}:${CONTAINER_PATH_APP}/project" \
+    --volume="${PATH_HOME}/.gitconfig:${CONTAINER_PATH_HOME}/.gitconfig" \
+    --volume="${PATH_HOME}/.ssh:${CONTAINER_PATH_HOME}/.ssh" \
     --entrypoint=composer \
-    -w=/app/project \
+    -w="${CONTAINER_PATH_HOME}/project" \
     --name="${PROJECT}_init" \
-    --user=app \
     -e COMPOSER_PROCESS_TIMEOUT=600 \
     ${DOCKER_IMAGE_DEVELOPERTOOL} \
-    --working-dir=/app/project \
+    --working-dir="${CONTAINER_PATH_APP}/project" \
  	create-project drupal-composer/drupal-project:8.x-dev app --stability dev --no-interaction
 
 echo "Overwriting the default settings.inc"
