@@ -19,6 +19,7 @@ then you are not likely to get much support.
 ## Quick start/demo
 
 See a video of the demo:
+
 [![WunderTools Docker prototype demo 22.05.2016](https://img.youtube.com/vi/uDG7ngDdn1Q/0.jpg)](https://youtu.be/uDG7ngDdn1Q)
 
 or if you want a fast start to a new project using this tool or you want to demo the functionality, follow these steps:
