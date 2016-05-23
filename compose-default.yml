@@ -62,8 +62,8 @@ services:
       # recommended, as it creates a dependency on the host environment.  
       # consider creating a more formal layout instead.
       #
-      - ${PATH_APP}/web:/app/web 
-      - ${PATH_APP}/vendor:/app/vendor
+      - ${PATH_SOURCE}/web:/app/web 
+      - ${PATH_SOURCE}/vendor:/app/vendor
 
   ####
   # DB node 
