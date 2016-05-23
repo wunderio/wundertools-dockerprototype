@@ -27,9 +27,9 @@ CONTAINER_ARGS="$@"
 docker run --rm -t -i \
     --net "${COMPOSE_NETWORK}" \
     --hostname="${PROJECT}" \
-    --volume="${PATH_GULP}:/app/gulptarget" \
+    --volume="${PATH_GULP}:${CONTAINER_PATH_APP}/gulptarget" \
     --entrypoint="/usr/bin/gulp" \
-    -w=/app/gulptarget \
+    -w="${CONTAINER_PATH_APP}/gulptarget" \
     --name="${PROJECT}_composer" \
     ${DOCKER_IMAGE_DEVELOPERTOOL} \
     ${CONTAINER_ARGS}

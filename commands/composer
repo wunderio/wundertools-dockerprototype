@@ -33,28 +33,30 @@ done
 # Isolate arguments to pass to docker
 CONTAINER_ARGS="$@"
 
-
+# what host path is the target for composer (has composer.json)
 if [ "${COMPOSER_RUN_IN_PWD}" == "YES" ]; then
-    PATH_COMPOSER="${PATH_EXECUTION}"
+    PATH_TARGET="${PATH_EXECUTION}"
 else
-    PATH_COMPOSER="${PATH_SOURCE}"
+    PATH_TARGET="${PATH_SOURCE}"
 fi
+
+# at what path in the container will we mount the composer target
+CONTAINER_PATH_TARGET="${CONTAINER_PATH_APP}/target"
 
 #echo ">>>>>DOCKER:COMPOSER START [CMD: ${CONTAINER_ARGS}]
 #"
 
 docker run --rm -t -i \
-    --hostname=${PROJECT} \
-    --volume="${PATH_COMPOSER}:/app/source" \
-    --volume="${PATH_HOME}/.gitconfig:/app/.gitconfig" \
-    --volume="${PATH_HOME}/.ssh:/app/.ssh" \
-    --entrypoint=composer \
-    -w=/app/source \
     --name="${PROJECT}_composer" \
-    --user=app \
-    -e COMPOSER_PROCESS_TIMEOUT=600 \
+    --hostname=${PROJECT} \
+    --volume="${PATH_TARGET}:${CONTAINER_PATH_TARGET}" \
+    --volume="${PATH_HOME}/.gitconfig:${CONTAINER_PATH_HOME}/.gitconfig" \
+    --volume="${PATH_HOME}/.ssh:${CONTAINER_PATH_HOME}/.ssh" \
+    -w="${CONTAINER_PATH_TARGET}" \
+    --entrypoint=composer \
+    -e COMPOSER_PROCESS_TIMEOUT=600 \  # Added to prevent composer timeout in slow OSX
     ${DOCKER_IMAGE_DEVELOPERTOOL} \
-    --working-dir=/app/source \
+    --working-dir="${CONTAINER_PATH_TARGET}" \
     ${CONTAINER_ARGS}
 
 #echo "

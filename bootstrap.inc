@@ -152,6 +152,26 @@ if [ -z "${DOCKER_IMAGE_DEVELOPERTOOL}" ]; then
     DOCKER_IMAGE_DEVELOPERTOOL="quay.io/wunder/wundertools-image-fuzzy-developershell"
 fi
 
+#
+# CONTAINER PATHS : what paths are used inside the containers
+#
+# @note this is new, and I am not sure yet how to split these up
+# but really they are only used inside the commands.
+#
+
+# Path to user home in the container
+if [ -z "${CONTAINER_PATH_HOME}" ]; then
+  CONTAINER_PATH_HOME="/app"
+fi
+# CONTAINER_PATH_APP : root application path inside the images
+if [ -z "${CONTAINER_PATH_APP}" ]; then
+  CONTAINER_PATH_APP="/app"
+fi
+# CONTAINER_PATH_SOURCE : root source path inside the images
+if [ -z "${CONTAINER_PATH_SOURCE}" ]; then
+  CONTAINER_PATH_SOURCE="/app"
+fi
+
 #####################################################
 # STAGE 3 : determine what command to run, and run it
 #
