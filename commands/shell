@@ -7,25 +7,24 @@
 #
 
 CONTAINER_ARGS="$@"
-# echo ">>>>>DOCKER:SHELL START [ARG#:$#][CMD: ${CONTAINER_ARGS}]---[$*]:[$0][$1][$2][$3]
+# echo ">>>>>DOCKER:SHELL START [ARGS:${CONTAINER_ARGS}]
 # "
 
 docker run --rm -t -i \
     --net "${COMPOSE_NETWORK}" \
+    --name="${PROJECT}_shell" \
     --hostname=${PROJECT} \
     --link="${PROJECT}_db_1:db.app" \
     --link="${PROJECT}_fpm_1:fpm.app" \
     --link="${PROJECT}_www_1:www.app" \
     --volumes-from="${PROJECT}_source_1" \
-    --volume="${PATH_APP}:/app/project" \
-    --volume="${PATH_SOURCE}:/app/source" \
-    --volume="${PATH_SOURCE}/console:/app/.console" \
-    --volume="${PATH_SOURCE}/drush:/app/.drush" \
-    --volume="${PATH_HOME}/.gitconfig:/app/.gitconfig" \
-    --volume="${PATH_HOME}/.ssh:/app/.ssh" \
-    -w=/app \
-    --name="${PROJECT}_shell" \
-    --user=app \
+    --volume="${PATH_APP}:${CONTAINER_PATH_APP}/project" \
+    --volume="${PATH_SOURCE}:${CONTAINER_PATH_SOURCE}/source" \
+    --volume="${PATH_SOURCE}/console:${CONTAINER_PATH_HOME}/.console" \
+    --volume="${PATH_SOURCE}/drush:${CONTAINER_PATH_HOME}/.drush" \
+    --volume="${PATH_HOME}/.gitconfig:${CONTAINER_PATH_HOME}/.gitconfig" \
+    --volume="${PATH_HOME}/.ssh:${CONTAINER_PATH_HOME}/.ssh" \
+    -w="${CONTAINER_PATH_APP}" \
     ${DOCKER_IMAGE_DEVELOPERTOOL} \
     ${CONTAINER_ARGS}
 
