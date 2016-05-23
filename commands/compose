@@ -6,16 +6,17 @@
 # configurations files.
 #
 # @NOTE that this is now the default command, so in some cases it will receive
-#    bad arguments which may have been intened for a different container.
+#   bad arguments which may have been intened for a different container.
 #
-#    $/> wundertools up
-#    $/> wundertools compose restart www
+#   $/> wundertools up
+#   $/> wundertools compose restart www
 #
 # Compose yml file is looked for here (PATH_APP is usually ./app or ../)
-#   PATH_APP/compose.{PROJECT}.yml
-#   PATH_APP/compose.default.yml
-#   ./compose.{PROJECT}.yml
-#   ./compose.default.yml
+#   PATH_APP/docker-compose.yml
+#   PATH_APP/compose-$PROJECT.yml
+#   PATH_WUNDERTOOLS/docker-compose.yml
+#   PATH_WUNDERTOOLS/compose-$PROJECT.yml
+#   PATH_WUNDERTOOLS/compose-default.yml
 #
 
 docker-compose --file "${COMPOSE_FILE}" --project-name "${COMPOSE_PROJECT_NAME}" $@
