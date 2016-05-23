@@ -54,7 +54,7 @@ docker run --rm -t -i \
     --volume="${PATH_HOME}/.ssh:${CONTAINER_PATH_HOME}/.ssh" \
     -w="${CONTAINER_PATH_TARGET}" \
     --entrypoint=composer \
-    -e COMPOSER_PROCESS_TIMEOUT=600 \  # Added to prevent composer timeout in slow OSX
+    -e COMPOSER_PROCESS_TIMEOUT=600 \
     ${DOCKER_IMAGE_DEVELOPERTOOL} \
     --working-dir="${CONTAINER_PATH_TARGET}" \
     ${CONTAINER_ARGS}
