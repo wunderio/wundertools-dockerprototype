@@ -7,25 +7,29 @@
 #   - Copies into place the default wundertools.settings.inc and compose-default.yml file.
 #
 
-printf "Initialising new Drupal 8 project (drupal-composer/drupal-project) in ${PATH_APP} ...\n"
+printf "Initialising new Drupal 8 project (drupal-composer/drupal-project) in ${PATH_APP}/app ...\n"
 
-"${PATH_WUNDERTOOLS}/wundertools" composer --pwd create-project drupal-composer/drupal-project:8.x-dev temp --stability dev --no-interaction
-cp -a "${PATH_APP}/temp/*" "${PATH_APP}"
-rm -rf "${PATH_APP}/temp"
+# composer create-project of drupal in PATH_APP
+cd "${PATH_APP}"
+"${PATH_WUNDERTOOLS}/wundertools" composer --pwd create-project drupal-composer/drupal-project:8.x-dev app --stability dev --no-interaction
 
 printf "Initialising default settings...\n"
 
-cp "${PATH_WUNDERTOOLS}/wundertools.settings.inc" "${PATH_APP}"
-#cp "${PATH_WUNDERTOOLS}/compose-default.yml" "${PATH_APP}/docker-compose.yml.example"
+cp "${PATH_WUNDERTOOLS}/${WUNDERTOOLS_SETTINGS_FILENAME}" "${PATH_APP}/${WUNDERTOOLS_SETTINGS_FILENAME}"
+sed -i 's/^#SUBPATH_SOURCE=""/SUBPATH_SOURCE="app"/' "${PATH_APP}/${WUNDERTOOLS_SETTINGS_FILENAME}"
 
+# Instructions
 echo "
 ------ INIT COMPLETE ------------
 
-Drupal 8 has been built into the curent path, and 
+Drupal 8 has been built into the curent path, and
 a new wundertools.settings.inc file has been added
 which you can modify to alter your system.
 
-If you have a custom docker-compose.yml file, you 
+Wundertools now expects your source code to be in
+the /app path, next to the wundertools folder.
+
+If you have a custom docker-compose.yml file, you
 can add it the project root, next to the wundertools
 folder.  If you want to create one, you can start
 with the composer-default.yml file in the wundertools
