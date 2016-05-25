@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+####
+# Run Tests
+#
+# Run the Drupal test suite
+#
+
+CONTAINER_ARGS="$@"
+# echo ">>>>>DOCKER:SHELL START [ARGS:${CONTAINER_ARGS}]
+# "
+
+docker run --rm -t -i \
+    --net "${COMPOSE_NETWORK}" \
+    --name="${PROJECT}_runtests" \
+    --hostname=${PROJECT} \
+    --link="${PROJECT}_db_1:db.app" \
+    --volumes-from="${PROJECT}_source_1" \
+    -w="${CONTAINER_PATH_SOURCE}" \
+    --entrypoint="/usr/bin/php" \
+    ${DOCKER_IMAGE_DEVELOPERTOOL} \
+    "${CONTAINER_PATH_SOURCE}/web/core/scripts/run-tests.sh" \
+    --php "/usr/bin/php" \
+    ${CONTAINER_ARGS}
+
+# echo "
+# <<<<<DOCKER:SHELL END "
