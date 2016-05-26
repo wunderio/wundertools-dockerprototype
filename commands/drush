@@ -2,9 +2,9 @@
 ###
 # DRUSH
 #
-# Run drush in a container, connected to source volumes and 
+# Run drush in a container, connected to source volumes and
 # linked to other containers.
-# This lets you run drush as though it was installed on the 
+# This lets you run drush as though it was installed on the
 # host, but without installing php or anything on the host
 #
 #     $/> wundertools drush cc all
@@ -27,7 +27,7 @@ docker run --rm -t -i \
     --volumes-from="${PROJECT}_source_1" \
     --volume="${PATH_SOURCE}/drush:${CONTAINER_PATH_HOME}/.drush" \
     --volume="${PATH_HOME}/.ssh:${CONTAINER_PATH_HOME}/.ssh" \
-    -w="${PATH_CONTAINER_SOURCE}/web" \
+    -w="${CONTAINER_PATH_SOURCE}/web" \
     --entrypoint="php" \
     ${DOCKER_IMAGE_DEVELOPERTOOL} \
     "${CONTAINER_PATH_SOURCE}/vendor/drush/drush/drush" \
