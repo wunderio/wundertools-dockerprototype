@@ -73,7 +73,7 @@ fi
 if [ -z "${PATH_SOURCE}" ]; then
   if [ -z "${SUBPATH_SOURCE}" ]; then
     PATH_SOURCE="${PATH_APP}"
-  else 
+  else
     PATH_SOURCE="$( cd "${PATH_APP}" && cd "${SUBPATH_SOURCE}" && pwd )"
   fi
 fi
@@ -94,7 +94,7 @@ fi
 ##########################
 # STAGE 2 : DEFAULT VALUES
 #
-# This section tries to autodetermine various values, if they are not 
+# This section tries to autodetermine various values, if they are not
 # already manually defined above.
 #
 
@@ -115,6 +115,9 @@ fi
 
 # perform some sanity checks on the project name, to make it safe for docker networks and container names
 PROJECT="$(echo "${PROJECT}" | tr '[:upper:]' '[:lower:]' | tr -cd '[:alnum:]')"
+
+# Detect the OS in some level because some commands like sed work differently on OS X compared to most Linux distributions.
+OS="$(uname)"
 
 #
 # DOCKER COMPOSE
@@ -140,7 +143,7 @@ if [ -z "${COMPOSE_FILE}" ]; then
   fi
 fi
 
-# Here we try to predict what network docker-compose will have created, as 
+# Here we try to predict what network docker-compose will have created, as
 # we will need to know it for some of the commands
 if [ -z "${COMPOSE_NETWORK}" ]; then
     COMPOSE_NETWORK="${PROJECT}_default"
@@ -182,8 +185,8 @@ fi
 PATH_COMMAND="${PATH_COMMANDS}/$1"
 
 if [ ! -f "${PATH_COMMAND}" ]; then
-  PATH_COMMAND="${PATH_COMMANDS}/compose"  
-else 
+  PATH_COMMAND="${PATH_COMMANDS}/compose"
+else
   shift
 fi
 
