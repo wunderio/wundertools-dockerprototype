@@ -24,7 +24,8 @@ echo "--> creating new settings file"
 cp "${PATH_WUNDERTOOLS}/${WUNDERTOOLS_SETTINGS_FILENAME}" "${PATH_APP}/${WUNDERTOOLS_SETTINGS_FILENAME}"
 # the only change we make to the settings is to tell wundertools that the source is at ./app
 echo "--> configuring settings file with new source path '${SUBPATH_SOURCE}'"
-sed -i "s/^#SUBPATH_SOURCE=\"\"/SUBPATH_SOURCE=\"${SUBPATH_SOURCE}\"/" "${PATH_APP}/${WUNDERTOOLS_SETTINGS_FILENAME}"
+sed -i .bak "s/^#SUBPATH_SOURCE=\"\"/SUBPATH_SOURCE=\"${SUBPATH_SOURCE}\"/" "${PATH_APP}/${WUNDERTOOLS_SETTINGS_FILENAME}"
+rm "${PATH_APP}/${WUNDERTOOLS_SETTINGS_FILENAME}.bak"
 
 # Instructions
 echo "
