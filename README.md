@@ -222,7 +222,7 @@ Some of these are not necessary with this tool (ssh), some are provided as comma
 
 You can usually rely on a direct route to your container.  To find the IP for any container:
 
-    $/> wundertools tools containerIP www
+    $/> wundertools tool containerIP www
 
 *** Note that on some docker setups, the host has not routed container traffic
 to the docker subnet (bad host) and so a manual route may be necessary.  The OSX Beta client seems to have this issue, but no route seems avaialable.
@@ -256,6 +256,6 @@ Or open a full operational prompt:
 If you really need access to a specific container, you can get a fast shell inside any of the
 actual containers using:
 
-    $/> wundertools tools execshell fpm
+    $/> wundertools tool execshell fpm
 
 *** Note that this shell is not as usefull as the featured shell from "wundertools shell" as most of the service images do not even have bash installed.
