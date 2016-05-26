@@ -13,18 +13,17 @@ PATH_SOURCE="${PATH_APP}/${SUBPATH_SOURCE}"
 
 printf "Initialising new Drupal 8 project (drupal-composer/drupal-project) in ${PATH_SOURCE} ...\n"
 
-# composer create-project of drupal in PATH_APP
+# Do everything from the root path (don't do it inside the wundertools folder)
 cd "${PATH_APP}"
+
+# composer create-project of drupal in PATH_APP
 "${PATH_WUNDERTOOLS}/wundertools" composer --pwd create-project drupal-composer/drupal-project:8.x-dev "${SUBPATH_SOURCE}" --stability dev --no-interaction
 
 printf "Initialising default settings...\n"
 
-# Copy the default settings to the project root (it is largely an empty template)
-echo "--> creating new settings file"
-cp "${PATH_WUNDERTOOLS}/${WUNDERTOOLS_SETTINGS_FILENAME}" "${PATH_APP}/${WUNDERTOOLS_SETTINGS_FILENAME}"
-# the only change we make to the settings is to tell wundertools that the source is at ./app
-echo "--> configuring settings file with new source path '${SUBPATH_SOURCE}'"
-sed -i "s/^#SUBPATH_SOURCE=\"\"/SUBPATH_SOURCE=\"${SUBPATH_SOURCE}\"/" "${PATH_APP}/${WUNDERTOOLS_SETTINGS_FILENAME}"
+# Copy the demo template settings to the project root (it has on a change for SUBPATH_SOURCE)
+echo "--> creating new settings file from demo template"
+cp "${PATH_WUNDERTOOLS}templates/demo/${WUNDERTOOLS_SETTINGS_FILENAME}" "${PATH_APP}/${WUNDERTOOLS_SETTINGS_FILENAME}"
 
 # Instructions
 echo "
