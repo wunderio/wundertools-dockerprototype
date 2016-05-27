@@ -176,5 +176,8 @@ services:
       # currently portmapping port 80 to the host 8080
       - "8080:80"
 
+####
+# Define a volume to store database data.
+#
 volumes:
   db-data:
