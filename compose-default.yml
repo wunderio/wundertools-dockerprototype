@@ -14,20 +14,20 @@
 #
 #
 # Because the goal of this file is to have something which can be
-# used anywhere, even outside of this repo, the file should not 
+# used anywhere, even outside of this repo, the file should not
 # rely on any builds or bind volumes, as such elements would not
 # work on a host, without access to the full wundertools set.
 #
 # - Any volume binds should be limited to overlaying local configuration
 #   or source code on top of something that already exists in the image,
 #   in order to get local access in development.
-# - Any image builds should push directly to hosted images, which can 
+# - Any image builds should push directly to hosted images, which can
 #   be used in production.
 #
 ####
 
 ####
-# This file uses docker-compose version 2 syntax.  It doesn't really need 
+# This file uses docker-compose version 2 syntax.  It doesn't really need
 # to though, so if this gives you problems, test it without the version
 # and services lines.
 version: "2"
@@ -40,51 +40,53 @@ services:
   ####
   # SOURCE
   #
-  # Create a container for source code 
+  # Create a container for source code
   # [In production this should be an image with source code in the build]
   #
   # This container has a "CMD" but it never needs to run as it is used only as
   # a source of "volume" from which other containers get their source code.
   # When the service stars, it will exit with 0, which is expected.
   #
-  # In development, we overlay the host code to get local file access, but in 
+  # In development, we overlay the host code to get local file access, but in
   # production we want an image that has source code built in.
-  # 
+  #
   source:
     image: quay.io/wunder/wunder-alpine-base
     command:
       - /bin/true # this is an industry standard hack used with docker-compose
     volumes:
-      # Here we overlay local source on top of where the built source code 
+      # Here we overlay local source on top of where the built source code
       # would be in a production ready source image.
       #
       # @NOTE we use an env variable to point to a sub-path, but this is not
-      # recommended, as it creates a dependency on the host environment.  
+      # recommended, as it creates a dependency on the host environment.
       # consider creating a more formal layout instead.
       #
-      - ${PATH_SOURCE}/web:/app/web 
+      - ${PATH_SOURCE}/web:/app/web
       - ${PATH_SOURCE}/vendor:/app/vendor
 
   ####
-  # DB node 
+  # DB node
   #
   # Presents a standalone DB server with an open port
   #
   # This image has a defaul db already created.  If you'd like to have a custom
-  # db and db credentials, comment out the "image:" line, and uncomment the 
+  # db and db credentials, comment out the "image:" line, and uncomment the
   # build section, where you can set credentials.
   #
   # by default: mysql://app:app@db.app/app
   #   where db.app is define in fpm: links: below
   #
-  db: 
+  db:
     #image: quay.io/wunder/alpine-mariadb
     image: quay.io/wunder/wundertools-image-fuzzy-mariadb
+    volumes:
+      - "db-data:/var/lib/mysql"
 
     ####
     # IMAGE BUILD OVERRIDES
     #
-    # If you want custom credentials, consider commenting out the 
+    # If you want custom credentials, consider commenting out the
     # db: "image:" line, and uncommenting this.  It will give you a custom
     # db image for your app, with credentials as suggested below.
     # The default values are show.
@@ -95,7 +97,7 @@ services:
     #    MYSQL_ROOT_PASSWORD: root
     #    MYSQL_USER: app
     #    MYSQL_PASSWORD: app
-    #    MYSQL_DATABASE: app 
+    #    MYSQL_DATABASE: app
 
   ####
   # MemCacheD
@@ -125,8 +127,8 @@ services:
   ####
   # WWW node
   #
-  # Either an nginx or apache server that receives https requests, and if needed 
-  # hands off to fpm using the url fpm.app.  This service gets only read access to 
+  # Either an nginx or apache server that receives https requests, and if needed
+  # hands off to fpm using the url fpm.app.  This service gets only read access to
   # volumes from the source container.
   #
   # There is an ENV variable here, that would configure DNSDOCK to use a specific URL
@@ -173,3 +175,9 @@ services:
     ports:
       # currently portmapping port 80 to the host 8080
       - "8080:80"
+
+####
+# Define a volume to store database data.
+#
+volumes:
+  db-data:
