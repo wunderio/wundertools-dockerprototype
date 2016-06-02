@@ -35,8 +35,8 @@ docker run --rm -t -i \
     --hostname=${PROJECT} \
     --link="${PROJECT}_db_1:db.app" \
     --volumes-from="${PROJECT}_source_1" \
-    --volume="${PATH_SOURCE}/console:${CONTAINER_PATH_HOME}/.console" \
-    --volume="${PATH_SOURCE}/drush:${CONTAINER_PATH_HOME}/.drush" \
+    --volume="${PATH_SETTINGS}/console:${CONTAINER_PATH_HOME}/.console" \
+    --volume="${PATH_SETTINGS}/drush:${CONTAINER_PATH_HOME}/.drush" \
     --volume="${PATH_HOME}/.ssh:${CONTAINER_PATH_HOME}/.ssh" \
     -w="${CONTAINER_PATH_SOURCE}/web" \
     --entrypoint="${CONTAINER_PATH_SOURCE}/vendor/bin/drupal" \

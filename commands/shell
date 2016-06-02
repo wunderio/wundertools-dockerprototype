@@ -32,8 +32,8 @@ docker run --rm -t -i \
     --volumes-from="${PROJECT}_source_1" \
     --volume="${PATH_APP}:${CONTAINER_PATH_APP}/project" \
     --volume="${PATH_SOURCE}:${CONTAINER_PATH_SOURCE}/source" \
-    --volume="${PATH_SOURCE}/console:${CONTAINER_PATH_HOME}/.console" \
-    --volume="${PATH_SOURCE}/drush:${CONTAINER_PATH_HOME}/.drush" \
+    --volume="${PATH_SETTINGS}/console:${CONTAINER_PATH_HOME}/.console" \
+    --volume="${PATH_SETTINGS}/drush:${CONTAINER_PATH_HOME}/.drush" \
     --volume="${PATH_HOME}/.gitconfig:${CONTAINER_PATH_HOME}/.gitconfig" \
     --volume="${PATH_HOME}/.ssh:${CONTAINER_PATH_HOME}/.ssh" \
     -w="${CONTAINER_PATH_APP}" \

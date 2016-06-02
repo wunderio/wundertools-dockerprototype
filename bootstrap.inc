@@ -68,13 +68,26 @@ fi
 # App source root
 #
 # PATH_SOURCE : the path to the application root
-# SUBPATH_SOURCE : if no PATH_APP is set, this will be used to find PATH_SOURCE FROM PATH_APP
+# SUBPATH_APP_SOURCE : if no PATH_SOURCE is set, this will be used to find PATH_SOURCE FROM PATH_APP
 
 if [ -z "${PATH_SOURCE}" ]; then
-  if [ -z "${SUBPATH_SOURCE}" ]; then
+  if [ -z "${SUBPATH_APP_SOURCE}" ]; then
     PATH_SOURCE="${PATH_APP}"
   else
-    PATH_SOURCE="$( cd "${PATH_APP}" && cd "${SUBPATH_SOURCE}" && pwd )"
+    PATH_SOURCE="$( cd "${PATH_APP}" && cd "${SUBPATH_APP_SOURCE}" && pwd )"
+  fi
+fi
+
+# App settings root
+#
+# PATH_SETTINGS : the path to the settings root
+# SUBPATH_APP_SOURCE : if no PATH_SOURCE is set, this will be used to find PATH_SOURCE FROM PATH_APP
+
+if [ -z "${PATH_SETTINGS}" ]; then
+  if [ -z "${SUBPATH_APP_SOURCE}" ]; then
+    PATH_SETTINGS="${PATH_APP}"
+  else
+    PATH_SETTINGS="$( cd "${PATH_APP}" && cd "${SUBPATH_APP_SOURCE}" && pwd )"
   fi
 fi
 
