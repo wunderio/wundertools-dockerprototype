@@ -84,10 +84,10 @@ fi
 # SUBPATH_APP_SOURCE : if no PATH_SOURCE is set, this will be used to find PATH_SOURCE FROM PATH_APP
 
 if [ -z "${PATH_SETTINGS}" ]; then
-  if [ -z "${SUBPATH_APP_SOURCE}" ]; then
+  if [ -z "${SUBPATH_APP_SETTINGS}" ]; then
     PATH_SETTINGS="${PATH_APP}"
   else
-    PATH_SETTINGS="$( cd "${PATH_APP}" && cd "${SUBPATH_APP_SOURCE}" && pwd )"
+    PATH_SETTINGS="$( cd "${PATH_APP}" && cd "${SUBPATH_APP_SETTINGS}" && pwd )"
   fi
 fi
 
@@ -181,11 +181,15 @@ if [ -z "${CONTAINER_PATH_HOME}" ]; then
 fi
 # CONTAINER_PATH_APP : root application path inside the images
 if [ -z "${CONTAINER_PATH_APP}" ]; then
-  CONTAINER_PATH_APP="/app"
+  CONTAINER_PATH_APP="${CONTAINER_PATH_HOME}"
 fi
 # CONTAINER_PATH_SOURCE : root source path inside the images
 if [ -z "${CONTAINER_PATH_SOURCE}" ]; then
-  CONTAINER_PATH_SOURCE="/app"
+  CONTAINER_PATH_SOURCE="${CONTAINER_PATH_HOME}"
+fi
+# CONTAINER_PATH_SETTINGS : settings path inside the images
+if [ -z "${CONTAINER_PATH_SETTINGS}" ]; then
+  CONTAINER_PATH_SETTINGS="${CONTAINER_PATH_HOME}"
 fi
 
 #####################################################
@@ -195,15 +199,24 @@ if [ -z "${PATH_COMMANDS}" ]; then
   PATH_COMMANDS="${PATH_WUNDERTOOLS}/commands"
 fi
 
-PATH_COMMAND="${PATH_COMMANDS}/$1"
+COMMAND="$1"
 
-if [ ! -f "${PATH_COMMAND}" ]; then
-  PATH_COMMAND="${PATH_COMMANDS}/compose"
+# If you pass a command boostrap, then no command is run
+if [ "$COMMAND" == "bootstrap" ]; then
+  echo "-== wundertools bootstrapped ==-"
 else
-  shift
+
+  PATH_COMMAND="${PATH_COMMANDS}/$1"
+
+  if [ ! -f "${PATH_COMMAND}" ]; then
+    PATH_COMMAND="${PATH_COMMANDS}/compose"
+  else
+    shift
+  fi
+
+  #echo "CONFIGURED [PATH_WUNDERTOOLS:${PATH_WUNDERTOOLS}][PATH_APP:${PATH_APP}][PATH_COMMAND:${PATH_COMMAND}][ARGS:$@]"
+
+  # Run the command
+  source "${PATH_COMMAND}" $@
+
 fi
-
-#echo "CONFIGURED [PATH_WUNDERTOOLS:${PATH_WUNDERTOOLS}][PATH_APP:${PATH_APP}][PATH_COMMAND:${PATH_COMMAND}][ARGS:$@]"
-
-# Run the command
-source "${PATH_COMMAND}" $@
