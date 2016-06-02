@@ -11,12 +11,18 @@
 #
 
 if [ ! -f "${PATH_SOURCE}/vendor/bin/drupal" ]; then
-  echo "WARNING: there is no drupal console in this project, which probably mean that you have not run composer in your project."
+  printf "ERROR: There is no Drupal Console in this project. This probably means that you have not run Composer in your project.\n"
   exit 1
 fi
 if [ ! -d "${PATH_SOURCE}/console" ]; then
-  echo "Project console configuration path was missing. creating it now"
+  printf "ERROR: Project Drupal Console configuration path (${PATH_SOURCE}/console) was missing. Creating it now...\n"
   mkdir -p "${PATH_SOURCE}/console"
+  printf "NOTICE: Project Drupal Console configuration path (${PATH_SOURCE}/console) created. Please run your command again.\n"
+  exit 1
+fi
+if [! -f ${PATH_SOURCE}/console/config.yml ]; then
+    printf "ERROR: Project Drupal Console configuration is missing. You need to run `wundertools drupal init` to start using Drupal Console.\n"
+    exit 1
 fi
 
 CONTAINER_ARGS="$@"

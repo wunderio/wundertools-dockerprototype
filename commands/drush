@@ -10,8 +10,12 @@
 #     $/> wundertools drush cc all
 #
 
+if [ ! -d "${PATH_SOURCE}/drush" ]; then
+  printf "NOTICE: Project Drush configuration path (${PATH_SOURCE}/drush) was missing. Creating it now...\n"
+  mkdir -p "${PATH_SOURCE}/drush"
+fi
 if [ ! -f "${PATH_SOURCE}/vendor/bin/drush" ]; then
-  echo "WARNING: there is no drush in this project, which probably mean that you have not run composer in your project."
+  printf "ERROR: There is no Drush in this project. This probably means that you have not run Composer in your project.\n"
   exit 1
 fi
 
