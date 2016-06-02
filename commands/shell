@@ -2,9 +2,21 @@
 ####
 # Shell
 #
-# Gives a user zsh shell, with all volumes mpp in, and all 
+# Gives a user zsh shell, with all volumes mpp in, and all
 # containers linked, for typical ssh like behaviour.
 #
+
+if [ ! -d "${PATH_SOURCE}/console" ]; then
+  printf "NOTICE: Project Drupal Console configuration path (${PATH_SOURCE}/console) was missing. Creating it now...\n"
+  mkdir -p "${PATH_SOURCE}/console"
+fi
+if [ ! -f "${PATH_SOURCE}/vendor/bin/drupal" ]; then
+  printf "WARNING: There is no Drupal Console in this project, global Drupal Console will be used (if your configured \$DOCKER_IMAGE_DEVELOPERTOOL has one, the default one does). This probably means that you have not run Composer in your project.\n"
+  printf "NOTICE: If you want to continue using the global Drupal Console, you should run `drupal init` in your Drupal installation folder. This initialises the Drupal Console configuration that is then automatically included in your project (${PATH_SOURCE}/console).\n"
+fi
+if [ ! -f "${PATH_SOURCE}/vendor/bin/drush" ]; then
+  printf "WARNING: There is no Drush in this project, global Drush will be used (if your configured \$DOCKER_IMAGE_DEVELOPERTOOL has one, the default one does). This probably means that you have not run Composer in your project.\n"
+fi
 
 CONTAINER_ARGS="$@"
 # echo ">>>>>DOCKER:SHELL START [ARGS:${CONTAINER_ARGS}]
