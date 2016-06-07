@@ -20,7 +20,7 @@ if [ ! -d "${PATH_SOURCE}/console" ]; then
   printf "NOTICE: Project Drupal Console configuration path (${PATH_SOURCE}/console) created. Please run your command again.\n"
   exit 1
 fi
-if [! -f ${PATH_SOURCE}/console/config.yml ]; then
+if [ ! -f ${PATH_SOURCE}/console/config.yml ]; then
     printf "ERROR: Project Drupal Console configuration is missing. You need to run `wundertools drupal init` to start using Drupal Console.\n"
     exit 1
 fi
