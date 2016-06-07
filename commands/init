@@ -17,13 +17,6 @@ printf "Initialising new Drupal 8 project (drupal-composer/drupal-project) in ${
 cd "${PATH_APP}"
 "${PATH_WUNDERTOOLS}/wundertools" composer --pwd create-project drupal-composer/drupal-project:8.x-dev "${SUBPATH_SOURCE}" --stability dev --no-interaction
 
-# Initialise Drupal Console.
-if [ ! -d "${PATH_SOURCE}/console" ]; then
-  mkdir -p "${PATH_SOURCE}/console"
-fi
-# We use the non-desctuctive `drupal init` without --override flag to preserve any existing configuration.
-"${PATH_WUNDERTOOLS}/wundertools" drupal init
-
 printf "Initialising default settings...\n"
 
 # Copy the default settings to the project root (it is largely an empty template)
@@ -38,6 +31,16 @@ then
 else
   sed -i "s/^#SUBPATH_SOURCE=\"\"/SUBPATH_SOURCE=\"${SUBPATH_SOURCE}\"/" "${PATH_APP}/${WUNDERTOOLS_SETTINGS_FILENAME}"
 fi
+
+# Initialise Drupal Console.
+if [ ! -d "${PATH_SOURCE}/console" ]; then
+  mkdir -p "${PATH_SOURCE}/console"
+fi
+# Create (can't use just `wundertools create` because it doesn't create the network) the containers since they are needed for `wundertools drupal init`.
+"${PATH_WUNDERTOOLS}/wundertools" up -d
+"${PATH_WUNDERTOOLS}/wundertools" stop
+# We use the non-desctuctive `drupal init` without --override flag to preserve any existing configuration.
+"${PATH_WUNDERTOOLS}/wundertools" drupal init
 
 # Instructions
 echo "
