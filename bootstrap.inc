@@ -36,6 +36,10 @@ if [ -z "${PATH_WUNDERTOOLS}" ]; then
     PATH_WUNDERTOOLS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 fi
 
+###
+# Include the utilities inc
+#
+source "${PATH_WUNDERTOOLS}/utility.inc"
 
 WUNDERTOOLS_SETTINGS_FILENAME="wundertools.settings.inc"
 # Include main config
@@ -88,6 +92,19 @@ if [ -z "${PATH_SETTINGS}" ]; then
     PATH_SETTINGS="${PATH_APP}"
   else
     PATH_SETTINGS="$( cd "${PATH_APP}" && cd "${SUBPATH_APP_SETTINGS}" && pwd )"
+  fi
+fi
+
+# Assets root
+#
+# PATH_ASSETS : the path to the assets root
+# SUBPATH_APP_ASSETS : if no PATH_ASSETS is set, this will be used to find PATH_ASSETS FROM PATH_SOURCE
+
+if [ -z "${PATH_ASSETS}" ]; then
+  if [ -z "${SUBPATH_APP_ASSETS}" ]; then
+    PATH_ASSETS="${PATH_APP}"
+  else
+    PATH_ASSETS="$( cd "${PATH_APP}" && cd "${SUBPATH_APP_ASSETS}" && pwd )"
   fi
 fi
 

@@ -39,8 +39,11 @@ if [ ! -f "${PATH_HOME}/.gitconfig" ]; then
   echo "--> ~/.gitconfig ------: NOT FOUND [${PATH_HOME}/.gitconfig] : user global git settings"
 fi
 
-if [ ! -d "${PATH_SOURCE}/console" ]; then
-  echo "--> console conf ------: NOT FOUND [${PATH_SOURCE}/console] : drupal console settings for your project"
+if [ ! -d "${PATH_SETTINGS}/drush" ]; then
+  echo "--> drush conf ------: NOT FOUND [${PATH_SETTINGS}/drush] : drush settings for your project"
+fi
+if [ ! -d "${PATH_SETTINGS}/console" ]; then
+  echo "--> console conf ------: NOT FOUND [${PATH_SETTINGS}/console] : drupal console settings for your project"
 fi
 
 if [ ! -f "${PATH_SOURCE}/vendor/bin/drupal" ]; then
