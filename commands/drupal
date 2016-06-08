@@ -10,6 +10,8 @@
 #     $/> wundertools drupal module:install devel
 #
 
+CONTAINER_ARGS="$@"
+
 if [ ! -f "${PATH_SOURCE}/vendor/bin/drupal" ]; then
   printf "ERROR: There is no Drupal Console in this project. This probably means that you have not run Composer in your project.\n"
   exit 1
@@ -20,12 +22,11 @@ if [ ! -d "${PATH_SOURCE}/console" ]; then
   printf "NOTICE: Project Drupal Console configuration path (${PATH_SOURCE}/console) created. Please run your command again.\n"
   exit 1
 fi
-if [ ! -f ${PATH_SOURCE}/console/config.yml ]; then
-    printf "ERROR: Project Drupal Console configuration is missing. You need to run `wundertools drupal init` to start using Drupal Console.\n"
+if [ ! -f ${PATH_SOURCE}/console/config.yml ] && [ ${CONTAINER_ARGS} != "init" ]; then
+    printf "ERROR: Project Drupal Console configuration is missing. You need to run 'wundertools drupal init' to start using Drupal Console.\n"
     exit 1
 fi
 
-CONTAINER_ARGS="$@"
 #echo ">>>>>DOCKER:DRUPAL-CONSOLE START [CMD: ${CONTAINER_ARGS}]
 #"
 

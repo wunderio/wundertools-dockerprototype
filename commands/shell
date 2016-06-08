@@ -12,7 +12,7 @@ if [ ! -d "${PATH_SOURCE}/console" ]; then
 fi
 if [ ! -f "${PATH_SOURCE}/vendor/bin/drupal" ]; then
   printf "WARNING: There is no Drupal Console in this project, global Drupal Console will be used (if your configured \$DOCKER_IMAGE_DEVELOPERTOOL has one, the default one does). This probably means that you have not run Composer in your project.\n"
-  printf "NOTICE: If you want to continue using the global Drupal Console, you should run `drupal init` in your Drupal installation folder. This initialises the Drupal Console configuration that is then automatically included in your project (${PATH_SOURCE}/console).\n"
+  printf "NOTICE: If you want to continue using the global Drupal Console, you should run 'drupal init' in your Drupal installation folder. This initialises the Drupal Console configuration that is then automatically included in your project (${PATH_SOURCE}/console).\n"
 fi
 if [ ! -f "${PATH_SOURCE}/vendor/bin/drush" ]; then
   printf "WARNING: There is no Drush in this project, global Drush will be used (if your configured \$DOCKER_IMAGE_DEVELOPERTOOL has one, the default one does). This probably means that you have not run Composer in your project.\n"
