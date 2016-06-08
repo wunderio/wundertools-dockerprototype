@@ -202,7 +202,11 @@ if [ -z "${CONTAINER_PATH_APP}" ]; then
 fi
 # CONTAINER_PATH_SOURCE : root source path inside the images
 if [ -z "${CONTAINER_PATH_SOURCE}" ]; then
-  CONTAINER_PATH_SOURCE="${CONTAINER_PATH_HOME}"
+  CONTAINER_PATH_SOURCE="${CONTAINER_PATH_APP}"
+fi
+# CONTAINER_PATH_VENDOR : vendor source path inside the images
+if [ -z "${CONTAINER_PATH_VENDOR}" ]; then
+  CONTAINER_PATH_VENDOR="${CONTAINER_PATH_APP}/vendor"
 fi
 # CONTAINER_PATH_SETTINGS : settings path inside the images
 if [ -z "${CONTAINER_PATH_SETTINGS}" ]; then

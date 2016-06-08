@@ -119,7 +119,11 @@ services:
     #image: quay.io/wunder/alpine-php-app
     image: quay.io/wunder/wundertools-image-fuzzy-php
     volumes_from:
-      - source  # FPM gets source code from the source container (should be ReadOnly)
+      - source:ro  # FPM gets source code from the source container
+    volumes:
+      - "assets/files:/app/web/sites/default/files"
+      - "assets/private:/app/private"
+      - "backup/archive:/app/backups"
     links:
       - db:db.app # fpm sees the db container at URL "db.app"
       - memcache:memcached.app # fpm sees the memcached container at URL "memcached.app"
@@ -145,6 +149,9 @@ services:
       DNSDOCK_ALIAS: www.wunderdemo.docker
     volumes_from:
       - source:ro # www gets source code from the source container AS READ ONLY
+    volumes:
+      - "assets/files:/app/web/sites/default/files"
+      - "assets/private:/app/private"
     links:
       # map the fpm container to URL "fpm.app"
       - fpm:fpm.app
@@ -181,3 +188,5 @@ services:
 #
 volumes:
   db-data:
+  assets:
+  backups:

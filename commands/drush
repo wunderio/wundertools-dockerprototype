@@ -10,11 +10,11 @@
 #     $/> wundertools drush cc all
 #
 
-if [ ! -d "${PATH_SOURCE}/drush" ]; then
-  printf "NOTICE: Project Drush configuration path (${PATH_SOURCE}/drush) was missing. Creating it now...\n"
-  mkdir -p "${PATH_SOURCE}/drush"
+if [ ! -d "${PATH_SETTINGS}/drush" ]; then
+  printf "NOTICE: Project Drush configuration path (${PATH_SETTINGS}/drush) was missing. Creating it now...\n"
+  mkdir -p "${PATH_SETTINGS}/drush"
 fi
-if [ ! -f "${PATH_SOURCE}/vendor/bin/drush" ]; then
+if [ ! -f "${PATH_SETTINGS}/vendor/bin/drush" ]; then
   printf "ERROR: There is no Drush in this project. This probably means that you have not run Composer in your project.\n"
   exit 1
 fi
@@ -29,6 +29,7 @@ docker run --rm -t -i \
     --hostname=${PROJECT} \
     --link="${PROJECT}_db_1:db.app" \
     --volumes-from="${PROJECT}_source_1" \
+    --volumes-from="${PROJECT}_fpm_1" \
     --volume="${PATH_SETTINGS}/drush:${CONTAINER_PATH_HOME}/.drush" \
     --volume="${PATH_HOME}/.ssh:${CONTAINER_PATH_HOME}/.ssh" \
     -w="${CONTAINER_PATH_SOURCE}/web" \

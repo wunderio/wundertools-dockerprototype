@@ -30,6 +30,7 @@ docker run --rm -t -i \
     --link="${PROJECT}_fpm_1:fpm.app" \
     --link="${PROJECT}_www_1:www.app" \
     --volumes-from="${PROJECT}_source_1" \
+    --volumes-from="${PROJECT}_fpm_1" \
     --volume="${PATH_APP}:${CONTAINER_PATH_APP}/project" \
     --volume="${PATH_SOURCE}:${CONTAINER_PATH_SOURCE}/source" \
     --volume="${PATH_SETTINGS}/console:${CONTAINER_PATH_HOME}/.console" \

@@ -16,13 +16,13 @@ if [ ! -f "${PATH_SOURCE}/vendor/bin/drupal" ]; then
   printf "ERROR: There is no Drupal Console in this project. This probably means that you have not run Composer in your project.\n"
   exit 1
 fi
-if [ ! -d "${PATH_SOURCE}/console" ]; then
-  printf "ERROR: Project Drupal Console configuration path (${PATH_SOURCE}/console) was missing. Creating it now...\n"
-  mkdir -p "${PATH_SOURCE}/console"
-  printf "NOTICE: Project Drupal Console configuration path (${PATH_SOURCE}/console) created. Please run your command again.\n"
+if [ ! -d "${PATH_SETTINGS}/console" ]; then
+  printf "ERROR: Project Drupal Console configuration path (${PATH_SETTINGS}/console) was missing. Creating it now...\n"
+  mkdir -p "${PATH_SETTINGS}/console"
+  printf "NOTICE: Project Drupal Console configuration path (${PATH_SETTINGS}/console) created. Please run your command again.\n"
   exit 1
 fi
-if [ ! -f ${PATH_SOURCE}/console/config.yml ] && [ ${CONTAINER_ARGS} != "init" ]; then
+if [ ! -f ${PATH_SETTINGS}/console/config.yml ] && [ ${CONTAINER_ARGS} != "init" ]; then
     printf "ERROR: Project Drupal Console configuration is missing. You need to run 'wundertools drupal init' to start using Drupal Console.\n"
     exit 1
 fi
@@ -36,6 +36,7 @@ docker run --rm -t -i \
     --hostname=${PROJECT} \
     --link="${PROJECT}_db_1:db.app" \
     --volumes-from="${PROJECT}_source_1" \
+    --volumes-from="${PROJECT}_fpm_1" \
     --volume="${PATH_SETTINGS}/console:${CONTAINER_PATH_HOME}/.console" \
     --volume="${PATH_SETTINGS}/drush:${CONTAINER_PATH_HOME}/.drush" \
     --volume="${PATH_HOME}/.ssh:${CONTAINER_PATH_HOME}/.ssh" \
