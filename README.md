@@ -96,7 +96,7 @@ already started, so that they can be conntected to.
 
 ##### Tool install
 
-All commands go through the wundertools/wundertools script, but you
+All commands go through the wundertools script, but you
 can move that script anywhere on your host, and can use the same
 script for any application with a wundertools folder.
 
@@ -111,6 +111,15 @@ Or maybe:
 Alternatively, you can just alias the script
 
     $/> alias wundertools="path/to/project/wundertools/wundertools"
+
+What we recommend is that you clone this project to a dedicated location where you keep you source files like `~/src` or `~/Source` and symlink the wundertools script to for example `/usr/local/bin/` if it's in your PATH like this:
+~~~
+cd ~/Source
+git clone https://github.com/wunderkraut/wundertools-dockerprototype.git
+cd wundertools-dockerprototype
+ln -s $(pwd)/wundertools /usr/local/bin/wundertools
+~~~
+This way your wundertools executable stays up to date when you pull new changes to the project source.
 
 ###### Examples
 
