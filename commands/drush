@@ -29,13 +29,13 @@ docker run --rm -t -i \
     --hostname=${PROJECT} \
     --link="${PROJECT}_db_1:db.app" \
     --volumes-from="${PROJECT}_source_1" \
-    --volumes-from="${PROJECT}_fpm_1" \
+    --volumes-from="${PROJECT}_assets_1" \
     --volume="${PATH_SETTINGS}/drush:${CONTAINER_PATH_HOME}/.drush" \
     --volume="${PATH_HOME}/.ssh:${CONTAINER_PATH_HOME}/.ssh" \
-    -w="${CONTAINER_PATH_SOURCE}/web" \
+    -w="${CONTAINER_PATH_WEBROOT}" \
     --entrypoint="php" \
     ${DOCKER_IMAGE_DEVELOPERTOOL} \
-    "${CONTAINER_PATH_SOURCE}/vendor/drush/drush/drush" \
+    "${CONTAINER_PATH_VENDOR}/drush/drush/drush" \
     ${CONTAINER_ARGS}
 
 # echo "

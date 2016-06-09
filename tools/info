@@ -11,19 +11,21 @@ echo " (In the future I will ask you questions to configure your site)"
 echo "CURRENT CONFIGURATION:"
 echo "-- GENERAL"
 echo "--> PROJECT NAME ------: ${PROJECT}"
-echo "-- PATHS (HOST)"
+echo "-- HOST PATHS"
 echo "--> HOME --------------: ${PATH_HOME}"
 echo "--> EXECUTION ---------: ${PATH_EXECUTION}"
 echo "--> WUNDERTOOLS -------: ${PATH_WUNDERTOOLS}"
 echo "--> APP ---------------: ${PATH_APP}"
 echo "--> SOURCE ------------: ${PATH_SOURCE}"
 echo "--> SETTINGS ----------: ${PATH_SETTINGS}"
+echo "--> WEBROOT -----------: ${PATH_WEBROOT}"
 echo "--> ASSETS ------------: ${PATH_ASSETS}"
-echo "-- PATHS (INSIDE CONTAINERS)"
+echo "-- CONTAINER PATHS"
 echo "--> HOME --------------: ${CONTAINER_PATH_HOME}"
 echo "--> APP ---------------: ${CONTAINER_PATH_APP}"
 echo "--> SETTINGS ----------: ${CONTAINER_PATH_SETTINGS}"
 echo "--> SOURCE ------------: ${CONTAINER_PATH_SOURCE}"
+echo "--> WEBROOT -----------: ${CONTAINER_PATH_WEBROOT}"
 echo "--> VENDOR ------------: ${CONTAINER_PATH_VENDOR}"
 echo "-- SETTINGS SOURCES (OPTIONAL)"
 
@@ -37,6 +39,10 @@ echo "--> COMPOSE_FILE-------: ${COMPOSE_FILE}"
 echo "--> COMPOSE_NETWORK----: ${COMPOSE_NETWORK}"
 
 echo "-- TESTS"
+
+if [ ! -f "${PATH_SOURCE}/composer.json" ]; then
+  echo "--> composer.json ---: NOT FOUND [${PATH_SOURCE}/composer.json] : project composer instructions"
+fi
 
 if [ ! -f "${PATH_HOME}/.gitconfig" ]; then
   echo "--> ~/.gitconfig ------: NOT FOUND [${PATH_HOME}/.gitconfig] : user global git settings"

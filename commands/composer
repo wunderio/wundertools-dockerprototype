@@ -14,7 +14,7 @@
 #
 # if == "YES" then composer is meant to be run as
 # a direct pass-through, as though running it in the current
-# path.  Otherwise it is meant to be run in the PATH_APP
+# path.  Otherwise it is meant to be run in the PATH_SOURCE
 #
 COMPOSER_RUN_IN_PWD="${COMPOSER_RUN_IN_PWD:-NO}"
 

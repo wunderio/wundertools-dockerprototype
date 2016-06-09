@@ -89,9 +89,22 @@ fi
 
 if [ -z "${PATH_SETTINGS}" ]; then
   if [ -z "${SUBPATH_APP_SETTINGS}" ]; then
-    PATH_SETTINGS="${PATH_APP}"
+    PATH_SETTINGS="${PATH_SOURCE}"
   else
     PATH_SETTINGS="$( cd "${PATH_APP}" && cd "${SUBPATH_APP_SETTINGS}" && pwd )"
+  fi
+fi
+
+# App source web root
+#
+# PATH_WEBROOT : the path to the application web root
+# SUBPATH_APP_WEBROOT : if no PATH_WEBROOT is set, this will be used to find PATH_WEBROOT FROM PATH_APP
+
+if [ -z "${PATH_WEBROOT}" ]; then
+  if [ -z "${SUBPATH_APP_WEBROOT}" ]; then
+    PATH_WEBROOT="${PATH_SOURCE}/web"
+  else
+    PATH_WEBROOT="$( cd "${PATH_APP}" && cd "${SUBPATH_APP_WEBROOT}" && pwd )"
   fi
 fi
 
@@ -102,12 +115,11 @@ fi
 
 if [ -z "${PATH_ASSETS}" ]; then
   if [ -z "${SUBPATH_APP_ASSETS}" ]; then
-    PATH_ASSETS="${PATH_APP}"
+    PATH_ASSETS="${PATH_APP}/assets"
   else
     PATH_ASSETS="$( cd "${PATH_APP}" && cd "${SUBPATH_APP_ASSETS}" && pwd )"
   fi
 fi
-
 
 ###
 # THINGS THAT AREN'T ALWAYS WORKING YET
@@ -203,6 +215,10 @@ fi
 # CONTAINER_PATH_SOURCE : root source path inside the images
 if [ -z "${CONTAINER_PATH_SOURCE}" ]; then
   CONTAINER_PATH_SOURCE="${CONTAINER_PATH_APP}"
+fi
+# CONTAINER_PATH_WEBROOT : root source path inside the images
+if [ -z "${CONTAINER_PATH_WEBROOT}" ]; then
+  CONTAINER_PATH_WEBROOT="${CONTAINER_PATH_SOURCE}/web"
 fi
 # CONTAINER_PATH_VENDOR : vendor source path inside the images
 if [ -z "${CONTAINER_PATH_VENDOR}" ]; then
