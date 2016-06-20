@@ -2,6 +2,8 @@
 
 This project is a simple behavoural prototype, to see what we would want from a docker based tool.
 
+** prototyping for the tool is complete.  Development of a proper app is starting now: https://github.com/wunderkraut/wundertool-py **
+
 This is not a complete docker toolset, and is not designed for easy implementation.  If you want
 to use this tool, expect to have to learn somethings about docker and docker-composer, as most of
 the effort here is simple wrappers around docker-compose, and docker run.
