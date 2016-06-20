@@ -66,6 +66,38 @@ services:
       - ${PATH_SOURCE}/vendor:/app/vendor
 
   ####
+  # Assets
+  #
+  # In contrast to source, assets holds any mutable files and data that other
+  # container may need access to.
+  # Assets is a distributable image, with volumes that need to be managed in any
+  # environment (backups, revisioned, distributed.) Asset volumes are typically
+  # used with named-volumes in production environments, so they do not need to
+  # have anything kept in image, but it can be advantageous to keep things in the
+  # image.
+  #
+  assets:
+    image: quay.io/wunder/client-fi-wkfi-assets:master
+    command:
+      - /bin/true
+    volumes:
+      - "assets_files:/app/web/sites/default/files"
+      - "assets_private:/app/private"
+      - "./assets/backup:/app/backup"
+
+  ####
+  # Servers
+  #
+  # The following nodes are services that support the application.  Typically
+  # the AMP stack is represented, along with any key-value, search and static-caching
+  # servers used.
+  #
+  # It is optimal if the services use generic shared images, that are used across
+  # instances, and across applications.  This makes the overally server impact low
+  # and means that management tools can focus on the source and asset images
+  #
+
+  ####
   # DB node
   #
   # Presents a standalone DB server with an open port
@@ -78,7 +110,6 @@ services:
   #   where db.app is define in fpm: links: below
   #
   db:
-    #image: quay.io/wunder/alpine-mariadb
     image: quay.io/wunder/wundertools-image-fuzzy-mariadb
     volumes:
       - "db-data:/var/lib/mysql"
@@ -119,11 +150,8 @@ services:
     #image: quay.io/wunder/alpine-php-app
     image: quay.io/wunder/wundertools-image-fuzzy-php
     volumes_from:
-      - source:ro  # FPM gets source code from the source container
-    volumes:
-      - "assets/files:/app/web/sites/default/files"
-      - "assets/private:/app/private"
-      - "backup/archive:/app/backups"
+      - source:ro  # FPM gets source code from the source container as Read Only
+      - assets     # FPM gets assets as Read/Write
     links:
       - db:db.app # fpm sees the db container at URL "db.app"
       - memcache:memcached.app # fpm sees the memcached container at URL "memcached.app"
@@ -149,9 +177,7 @@ services:
       DNSDOCK_ALIAS: www.wunderdemo.docker
     volumes_from:
       - source:ro # www gets source code from the source container AS READ ONLY
-    volumes:
-      - "assets/files:/app/web/sites/default/files"
-      - "assets/private:/app/private"
+      - assets:ro # www gets source code from the assets container AS READ ONLY
     links:
       # map the fpm container to URL "fpm.app"
       - fpm:fpm.app
