@@ -43,6 +43,9 @@
 # Or alternatively, set the sub path from PATH_APP to your source Root
 #SUBPATH_SOURCE=""
 
+# The same settings can be used for SUPATH_APP_SETTINGS, and SUBPATH_APP_ASSETS
+
+
 ###
 # Docker compose config
 #

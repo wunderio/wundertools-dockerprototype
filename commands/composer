@@ -14,7 +14,7 @@
 #
 # if == "YES" then composer is meant to be run as
 # a direct pass-through, as though running it in the current
-# path.  Otherwise it is meant to be run in the PATH_APP
+# path.  Otherwise it is meant to be run in the PATH_SOURCE
 #
 COMPOSER_RUN_IN_PWD="${COMPOSER_RUN_IN_PWD:-NO}"
 
@@ -46,7 +46,7 @@ CONTAINER_PATH_TARGET="${CONTAINER_PATH_APP}/target"
 #echo ">>>>>DOCKER:COMPOSER START [CMD: ${CONTAINER_ARGS}]
 #"
 
-docker run --rm -t -i \
+exec docker run --rm -t -i \
     --name="${PROJECT}_composer" \
     --hostname=${PROJECT} \
     --volume="${PATH_TARGET}:${CONTAINER_PATH_TARGET}" \

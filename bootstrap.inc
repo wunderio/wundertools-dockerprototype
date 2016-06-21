@@ -36,6 +36,10 @@ if [ -z "${PATH_WUNDERTOOLS}" ]; then
     PATH_WUNDERTOOLS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 fi
 
+###
+# Include the utilities inc
+#
+source "${PATH_WUNDERTOOLS}/utility.inc"
 
 WUNDERTOOLS_SETTINGS_FILENAME="wundertools.settings.inc"
 # Include main config
@@ -68,16 +72,87 @@ fi
 # App source root
 #
 # PATH_SOURCE : the path to the application root
-# SUBPATH_SOURCE : if no PATH_APP is set, this will be used to find PATH_SOURCE FROM PATH_APP
+# SUBPATH_APP_SOURCE : if no PATH_SOURCE is set, this will be used to find PATH_SOURCE FROM PATH_APP
 
 if [ -z "${PATH_SOURCE}" ]; then
-  if [ -z "${SUBPATH_SOURCE}" ]; then
+  if [ -z "${SUBPATH_APP_SOURCE}" ]; then
     PATH_SOURCE="${PATH_APP}"
   else
-    PATH_SOURCE="$( cd "${PATH_APP}" && cd "${SUBPATH_SOURCE}" && pwd )"
+    PATH_SOURCE="$( cd "${PATH_APP}" && cd "${SUBPATH_APP_SOURCE}" && pwd )"
   fi
 fi
 
+# App settings root
+#
+# PATH_SETTINGS : the path to the settings root
+# SUBPATH_APP_SOURCE : if no PATH_SOURCE is set, this will be used to find PATH_SOURCE FROM PATH_APP
+
+if [ -z "${PATH_SETTINGS}" ]; then
+  if [ -z "${SUBPATH_APP_SETTINGS}" ]; then
+    PATH_SETTINGS="${PATH_SOURCE}"
+  else
+    PATH_SETTINGS="$( cd "${PATH_APP}" && cd "${SUBPATH_APP_SETTINGS}" && pwd )"
+  fi
+fi
+
+# App source web root
+#
+# PATH_WEBROOT : the path to the application web root
+# SUBPATH_APP_WEBROOT : if no PATH_WEBROOT is set, this will be used to find PATH_WEBROOT FROM PATH_APP
+
+if [ -z "${PATH_WEBROOT}" ]; then
+  if [ -z "${SUBPATH_APP_WEBROOT}" ]; then
+    PATH_WEBROOT="${PATH_SOURCE}/web"
+  else
+    PATH_WEBROOT="$( cd "${PATH_APP}" && cd "${SUBPATH_APP_WEBROOT}" && pwd )"
+  fi
+fi
+
+# Assets root
+#
+# PATH_ASSETS : the path to the assets root
+<<<<<<< Updated upstream
+# SUBPATH_APP_ASSETS : if no PATH_ASSETS is set, this will be used to find PATH_ASSETS FROM PATH_APP
+=======
+# SUBPATH_APP_ASSETS : if no PATH_ASSETS is set, this will be used to find PATH_ASSETS FROM PATH_SOURCE
+>>>>>>> Stashed changes
+
+if [ -z "${PATH_ASSETS}" ]; then
+  if [ -z "${SUBPATH_APP_ASSETS}" ]; then
+    PATH_ASSETS="${PATH_APP}/assets"
+  else
+    PATH_ASSETS="$( cd "${PATH_APP}" && cd "${SUBPATH_APP_ASSETS}" && pwd )"
+  fi
+fi
+
+<<<<<<< Updated upstream
+# Data root
+#
+# PATH_DATA : the path to the DATA root
+# SUBPATH_APP_DATA : if no PATH_DATA is set, this will be used to find PATH_DATA FROM PATH_APP
+
+if [ -z "${PATH_DATA}" ]; then
+  if [ -z "${SUBPATH_APP_DATA}" ]; then
+    PATH_DATA="${PATH_APP}/DATA"
+  else
+    PATH_DATA="$( cd "${PATH_APP}" && cd "${SUBPATH_APP_DATA}" && pwd )"
+  fi
+=======
+
+
+# Assets root
+#
+# PATH_ASSETS : the path to the assets root
+# SUBPATH_APP_ASSETS : if no PATH_ASSETS is set, this will be used to find PATH_ASSETS FROM PATH_SOURCE
+
+if [ -z "${PATH_ASSETS}" ]; then
+if [ -z "${SUBPATH_APP_ASSETS}" ]; then
+PATH_ASSETS="${PATH_APP}/assets"
+else
+PATH_ASSETS="$( cd "${PATH_APP}" && cd "${SUBPATH_APP_ASSETS}" && pwd )"
+fi
+>>>>>>> Stashed changes
+fi
 
 ###
 # THINGS THAT AREN'T ALWAYS WORKING YET
@@ -168,11 +243,23 @@ if [ -z "${CONTAINER_PATH_HOME}" ]; then
 fi
 # CONTAINER_PATH_APP : root application path inside the images
 if [ -z "${CONTAINER_PATH_APP}" ]; then
-  CONTAINER_PATH_APP="/app"
+  CONTAINER_PATH_APP="${CONTAINER_PATH_HOME}"
 fi
 # CONTAINER_PATH_SOURCE : root source path inside the images
 if [ -z "${CONTAINER_PATH_SOURCE}" ]; then
-  CONTAINER_PATH_SOURCE="/app"
+  CONTAINER_PATH_SOURCE="${CONTAINER_PATH_APP}"
+fi
+# CONTAINER_PATH_WEBROOT : root source path inside the images
+if [ -z "${CONTAINER_PATH_WEBROOT}" ]; then
+  CONTAINER_PATH_WEBROOT="${CONTAINER_PATH_SOURCE}/web"
+fi
+# CONTAINER_PATH_VENDOR : vendor source path inside the images
+if [ -z "${CONTAINER_PATH_VENDOR}" ]; then
+  CONTAINER_PATH_VENDOR="${CONTAINER_PATH_APP}/vendor"
+fi
+# CONTAINER_PATH_SETTINGS : settings path inside the images
+if [ -z "${CONTAINER_PATH_SETTINGS}" ]; then
+  CONTAINER_PATH_SETTINGS="${CONTAINER_PATH_HOME}"
 fi
 
 #####################################################
@@ -182,15 +269,24 @@ if [ -z "${PATH_COMMANDS}" ]; then
   PATH_COMMANDS="${PATH_WUNDERTOOLS}/commands"
 fi
 
-PATH_COMMAND="${PATH_COMMANDS}/$1"
+COMMAND="$1"
 
-if [ ! -f "${PATH_COMMAND}" ]; then
-  PATH_COMMAND="${PATH_COMMANDS}/compose"
+# If you pass a command boostrap, then no command is run
+if [ "$COMMAND" == "bootstrap" ]; then
+  echo "-== wundertools bootstrapped ==-"
 else
-  shift
+
+  PATH_COMMAND="${PATH_COMMANDS}/$1"
+
+  if [ ! -f "${PATH_COMMAND}" ]; then
+    PATH_COMMAND="${PATH_COMMANDS}/compose"
+  else
+    shift
+  fi
+
+  #echo "CONFIGURED [PATH_WUNDERTOOLS:${PATH_WUNDERTOOLS}][PATH_APP:${PATH_APP}][PATH_COMMAND:${PATH_COMMAND}][ARGS:$@]"
+
+  # Run the command
+  source "${PATH_COMMAND}" $@
+
 fi
-
-#echo "CONFIGURED [PATH_WUNDERTOOLS:${PATH_WUNDERTOOLS}][PATH_APP:${PATH_APP}][PATH_COMMAND:${PATH_COMMAND}][ARGS:$@]"
-
-# Run the command
-source "${PATH_COMMAND}" $@
