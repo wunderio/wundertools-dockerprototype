@@ -111,11 +111,7 @@ fi
 # Assets root
 #
 # PATH_ASSETS : the path to the assets root
-<<<<<<< Updated upstream
-# SUBPATH_APP_ASSETS : if no PATH_ASSETS is set, this will be used to find PATH_ASSETS FROM PATH_APP
-=======
 # SUBPATH_APP_ASSETS : if no PATH_ASSETS is set, this will be used to find PATH_ASSETS FROM PATH_SOURCE
->>>>>>> Stashed changes
 
 if [ -z "${PATH_ASSETS}" ]; then
   if [ -z "${SUBPATH_APP_ASSETS}" ]; then
@@ -125,7 +121,6 @@ if [ -z "${PATH_ASSETS}" ]; then
   fi
 fi
 
-<<<<<<< Updated upstream
 # Data root
 #
 # PATH_DATA : the path to the DATA root
@@ -137,21 +132,6 @@ if [ -z "${PATH_DATA}" ]; then
   else
     PATH_DATA="$( cd "${PATH_APP}" && cd "${SUBPATH_APP_DATA}" && pwd )"
   fi
-=======
-
-
-# Assets root
-#
-# PATH_ASSETS : the path to the assets root
-# SUBPATH_APP_ASSETS : if no PATH_ASSETS is set, this will be used to find PATH_ASSETS FROM PATH_SOURCE
-
-if [ -z "${PATH_ASSETS}" ]; then
-if [ -z "${SUBPATH_APP_ASSETS}" ]; then
-PATH_ASSETS="${PATH_APP}/assets"
-else
-PATH_ASSETS="$( cd "${PATH_APP}" && cd "${SUBPATH_APP_ASSETS}" && pwd )"
-fi
->>>>>>> Stashed changes
 fi
 
 ###

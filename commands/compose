@@ -51,11 +51,10 @@ if [ -z "$DOCKER_HOST" ]; then
     DOCKER_HOST="/var/run/docker.sock"
 fi
 if [ -S "$DOCKER_HOST" ]; then
-    DOCKER_ADDR="-v $DOCKER_HOST:$DOCKER_HOST -e DOCKER_HOST"
+    DOCKER_ADDR="-v \"$DOCKER_HOST:$DOCKER_HOST\" -e DOCKER_HOST"
 else
     DOCKER_ADDR="-e DOCKER_HOST -e DOCKER_TLS_VERIFY -e DOCKER_CERT_PATH"
 fi
-
 
 # Setup volume mounts for compose config and context
 if [ "${PATH_TARGET}" != '/' ]; then
@@ -80,11 +79,4 @@ if [ -t 0 ]; then
     DOCKER_RUN_OPTIONS="$DOCKER_RUN_OPTIONS -i"
 fi
 
-exec docker run --rm \
-  $DOCKER_RUN_OPTIONS \
-  $DOCKER_ADDR \
-  $COMPOSE_OPTIONS \
-  $VOLUMES \
-  -w "${CONTAINER_PATH_TARGET}" \
-  $DOCKER_COMPOSE_IMAGE \
-  --file "${COMPOSE_FILE}" --project-name "${COMPOSE_PROJECT_NAME}" $@
+docker run --rm $DOCKER_RUN_OPTIONS $DOCKER_ADDR $COMPOSE_OPTIONS $VOLUMES -w "${CONTAINER_PATH_TARGET}" $DOCKER_COMPOSE_IMAGE --file ${COMPOSE_FILE} --project-name ${COMPOSE_PROJECT_NAME} $@
