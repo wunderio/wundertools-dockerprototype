@@ -83,7 +83,7 @@ services:
     volumes:
       - "assets_files:/app/web/sites/default/files"
       - "assets_private:/app/private"
-      - "./assets/backup:/app/backup"
+      - "assets_backup:/app/backup"
 
   ####
   # Servers
@@ -112,7 +112,7 @@ services:
   db:
     image: quay.io/wunder/wundertools-image-fuzzy-mariadb
     volumes:
-      - "db-data:/var/lib/mysql"
+      - "dbdata:/var/lib/mysql"
 
     ####
     # IMAGE BUILD OVERRIDES
@@ -213,6 +213,7 @@ services:
 # Define a volume to store database data.
 #
 volumes:
-  db-data:
-  assets:
-  backups:
+  dbdata:
+  assets_files:
+  assets_private:
+  assets_backup:

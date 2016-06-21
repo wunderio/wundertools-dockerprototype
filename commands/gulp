@@ -24,7 +24,7 @@ CONTAINER_ARGS="$@"
 # echo ">>>>>DOCKER:GULP START [CMD: ${CONTAINER_ARGS}]
 # "
 
-docker run --rm -t -i \
+exec docker run --rm -t -i \
     --net "${COMPOSE_NETWORK}" \
     --hostname="${PROJECT}" \
     --volume="${PATH_GULP}:${CONTAINER_PATH_APP}/gulptarget" \

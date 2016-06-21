@@ -46,7 +46,7 @@ CONTAINER_PATH_TARGET="${CONTAINER_PATH_APP}/target"
 #echo ">>>>>DOCKER:COMPOSER START [CMD: ${CONTAINER_ARGS}]
 #"
 
-docker run --rm -t -i \
+exec docker run --rm -t -i \
     --name="${PROJECT}_composer" \
     --hostname=${PROJECT} \
     --volume="${PATH_TARGET}:${CONTAINER_PATH_TARGET}" \

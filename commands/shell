@@ -6,13 +6,17 @@
 # containers linked, for typical ssh like behaviour.
 #
 
-if [ ! -d "${PATH_SOURCE}/console" ]; then
-  printf "NOTICE: Project Drupal Console configuration path (${PATH_SOURCE}/console) was missing. Creating it now...\n"
-  mkdir -p "${PATH_SOURCE}/console"
+if [ ! -d "${PATH_SETTINGS}/console" ]; then
+  printf "NOTICE: Project Drupal Console configuration path (${PATH_SETTINGS}/console) was missing. Creating it now...\n"
+  mkdir -p "${PATH_SETTINGS}/console"
 fi
 if [ ! -f "${PATH_SOURCE}/vendor/bin/drupal" ]; then
   printf "WARNING: There is no Drupal Console in this project, global Drupal Console will be used (if your configured \$DOCKER_IMAGE_DEVELOPERTOOL has one, the default one does). This probably means that you have not run Composer in your project.\n"
   printf "NOTICE: If you want to continue using the global Drupal Console, you should run 'drupal init' in your Drupal installation folder. This initialises the Drupal Console configuration that is then automatically included in your project (${PATH_SOURCE}/console).\n"
+fi
+if [ ! -d "${PATH_SETTINGS}/drush" ]; then
+  printf "NOTICE: Project Drush configuration path (${PATH_SETTINGS}/drush) was missing. Creating it now...\n"
+  mkdir -p "${PATH_SETTINGS}/drush"
 fi
 if [ ! -f "${PATH_SOURCE}/vendor/bin/drush" ]; then
   printf "WARNING: There is no Drush in this project, global Drush will be used (if your configured \$DOCKER_IMAGE_DEVELOPERTOOL has one, the default one does). This probably means that you have not run Composer in your project.\n"
@@ -22,7 +26,7 @@ CONTAINER_ARGS="$@"
 # echo ">>>>>DOCKER:SHELL START [ARGS:${CONTAINER_ARGS}]
 # "
 
-docker run --rm -t -i \
+exec docker run --rm -t -i \
     --net "${COMPOSE_NETWORK}" \
     --name="${PROJECT}_shell" \
     --hostname=${PROJECT} \
@@ -31,12 +35,16 @@ docker run --rm -t -i \
     --link="${PROJECT}_www_1:www.app" \
     --volumes-from="${PROJECT}_source_1" \
     --volumes-from="${PROJECT}_assets_1" \
+    --volume="${PATH_EXECUTION}:${CONTAINER_PATH_APP}/pwd" \
     --volume="${PATH_APP}:${CONTAINER_PATH_APP}/project" \
-    --volume="${PATH_SOURCE}:${CONTAINER_PATH_SOURCE}/source" \
+    --volume="${PATH_SOURCE}:${CONTAINER_PATH_APP}/source" \
+    --volume="${PATH_SETTINGS}:${CONTAINER_PATH_APP}/settings" \
+    --volume="${PATH_ASSETS}:${CONTAINER_PATH_APP}/assets" \
     --volume="${PATH_SETTINGS}/console:${CONTAINER_PATH_HOME}/.console" \
     --volume="${PATH_SETTINGS}/drush:${CONTAINER_PATH_HOME}/.drush" \
     --volume="${PATH_HOME}/.gitconfig:${CONTAINER_PATH_HOME}/.gitconfig" \
     --volume="${PATH_HOME}/.ssh:${CONTAINER_PATH_HOME}/.ssh" \
+    --volume="${PATH_HOME}/.platformsh:${CONTAINER_PATH_HOME}/.platformsh" \
     -w="${CONTAINER_PATH_APP}" \
     ${DOCKER_IMAGE_DEVELOPERTOOL} \
     ${CONTAINER_ARGS}

@@ -23,7 +23,7 @@ CONTAINER_ARGS="$@"
 # echo ">>>>>DOCKER:DRUSH START [CMD: ${CONTAINER_ARGS}]
 # "
 
-docker run --rm -t -i \
+exec docker run --rm -t -i \
     --net "${COMPOSE_NETWORK}" \
     --name="${PROJECT}_drush" \
     --hostname=${PROJECT} \

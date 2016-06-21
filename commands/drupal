@@ -30,7 +30,7 @@ fi
 #echo ">>>>>DOCKER:DRUPAL-CONSOLE START [CMD: ${CONTAINER_ARGS}]
 #"
 
-docker run --rm -t -i \
+exec docker run --rm -t -i \
     --name="${PROJECT}_drupal" \
     --net "${COMPOSE_NETWORK}" \
     --hostname=${PROJECT} \
