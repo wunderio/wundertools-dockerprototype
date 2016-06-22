@@ -37,21 +37,17 @@
 # the $COMPOSE_OPTIONS environment variable.
 #
 
+COMPOSE_VERSION="${COMPOSE_VERSION:-1.6.2}"
+COMPOSE_IMAGE="docker/compose:${COMPOSE_VERSION}"
 
-set -e
-
-DOCKER_COMPOSE_VERSION="1.6.2"
-DOCKER_COMPOSE_IMAGE="docker/compose:$DOCKER_COMPOSE_VERSION"
-
-PATH_TARGET="${PATH_EXECUTION}"
+PATH_TARGET="${PATH_APP}"
 CONTAINER_PATH_TARGET="/app/target"
+CONTAINER_PATH_TARGET_FILE="${CONTAINER_PATH_TARGET}/docker-compose.yml"
 
-# Setup options for connecting to docker host
-if [ -z "$DOCKER_HOST" ]; then
-    DOCKER_HOST="/var/run/docker.sock"
-fi
-if [ -S "$DOCKER_HOST" ]; then
-    DOCKER_ADDR="-v \"$DOCKER_HOST:$DOCKER_HOST\" -e DOCKER_HOST"
+if [ -z "${DOCKER_HOST}" ]; then
+    DOCKER_ADDR="-v /var/run/docker.sock:/var/run/docker.sock"
+elif [ -S "$DOCKER_HOST" ]; then
+    DOCKER_ADDR="-v ${DOCKER_HOST}:${DOCKER_HOST} -e DOCKER_HOST"
 else
     DOCKER_ADDR="-e DOCKER_HOST -e DOCKER_TLS_VERIFY -e DOCKER_CERT_PATH"
 fi
@@ -60,13 +56,9 @@ fi
 if [ "${PATH_TARGET}" != '/' ]; then
     VOLUMES="-v ${PATH_TARGET}:${CONTAINER_PATH_TARGET}"
 fi
-if [ -n "$COMPOSE_FILE" ]; then
-    compose_dir=$(dirname $COMPOSE_FILE)
-fi
-# TODO: also check --file argument
-if [ -n "$compose_dir" ]; then
-    VOLUMES="$VOLUMES -v $compose_dir:$compose_dir"
-fi
+
+VOLUMES="$VOLUMES -v ${COMPOSE_FILE}:${CONTAINER_PATH_TARGET_FILE}"
+
 if [ -n "$HOME" ]; then
     VOLUMES="$VOLUMES -v $HOME:$HOME -v $HOME:/root" # mount $HOME in /root to share docker.config
 fi
@@ -79,4 +71,4 @@ if [ -t 0 ]; then
     DOCKER_RUN_OPTIONS="$DOCKER_RUN_OPTIONS -i"
 fi
 
-docker run --rm $DOCKER_RUN_OPTIONS $DOCKER_ADDR $COMPOSE_OPTIONS $VOLUMES -w "${CONTAINER_PATH_TARGET}" $DOCKER_COMPOSE_IMAGE --file ${COMPOSE_FILE} --project-name ${COMPOSE_PROJECT_NAME} $@
+exec docker run --rm $DOCKER_RUN_OPTIONS $DOCKER_ADDR $COMPOSE_OPTIONS $VOLUMES -w "${CONTAINER_PATH_TARGET}" $COMPOSE_IMAGE --file="${CONTAINER_PATH_TARGET_FILE}" --project-name="${COMPOSE_PROJECT_NAME}" $@

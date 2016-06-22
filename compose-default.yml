@@ -62,8 +62,8 @@ services:
       # recommended, as it creates a dependency on the host environment.
       # consider creating a more formal layout instead.
       #
-      - ${PATH_SOURCE}/web:/app/web
-      - ${PATH_SOURCE}/vendor:/app/vendor
+      - "./app/web:/app/web"
+      - "./app/web/vendor:/app/vendor"
 
   ####
   # Assets
